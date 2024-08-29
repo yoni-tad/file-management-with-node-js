@@ -1,6 +1,7 @@
-const fs = require('fs')
+const fs = require("fs");
 const UserSchema = require("../models/user_model");
 const FolderSchema = require("../models/file_model");
+const jwt = require("jsonwebtoken");
 
 exports.Register = async (req, res) => {
   const { firstName, lastName, email, password } = req.body;
@@ -17,13 +18,37 @@ exports.Register = async (req, res) => {
       email: email,
       password: password,
     });
-    const createFolder = fs.mkdirSync('uploads/'  + email);
+    const createFolder = fs.mkdirSync("uploads/" + email);
     const storeFolder = await FolderSchema.create({
       folderName: email,
-      folderPath: '/',
+      folderPath: "/",
       email: email,
     });
     res.status(201).json({ message: "Registration successfully" });
+  } catch (e) {
+    console.log(e.message);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+exports.Login = async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const user = await UserSchema.findOne({ email: email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    
+    const passwordMatch = await user.comparePassword(password);
+    if (!passwordMatch) {
+      return res.status(401).json({ message: "Incorrect password" });
+    }
+
+    const token = await jwt.sign({ user: user._id }, process.env.SECRET_KEY, {
+      expiresIn: "1 hour",
+    });
+    res.json(token)
   } catch (e) {
     console.log(e.message);
     res.status(500).json({ message: "Server error" });

@@ -9,7 +9,7 @@ const app = express()
 app.use(express.json());
 app.use('/api/file', fileRoute);
 app.use('/api/auth', authRoute);
-
+app.use(express.urlencoded({extended: true}))
 app.use(express.static('./public/'));
 
 (async () => {

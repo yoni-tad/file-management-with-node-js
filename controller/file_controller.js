@@ -9,12 +9,12 @@ exports.createFolder = async (req, res) => {
   name = name.replace(/^\.*\/|\/?[^\/]+\.[a-z]+|\/$/g, "");
 
   try {
-    if (fs.existsSync(dir + path + name)) {
+    if (fs.existsSync(dir + email + path + name)) {
       return res.json({ message: "Folder exist!" });
     }
 
-    const createFolder = fs.mkdirSync(dir + path + name);
-    if (!fs.existsSync(dir + path + name)) {
+    const createFolder = fs.mkdirSync(dir + email + path + name);
+    if (!fs.existsSync(dir + email + path + name)) {
       return res.json({ message: "Try again!" });
     }
 
@@ -30,6 +30,30 @@ exports.createFolder = async (req, res) => {
   }
 };
 
-exports.getFolder = async (req, res) => {
-  
+exports.getFiles = async (req, res) => {
+  const {path, email} = req.body
+
+  try {
+    const filePath = dir + email + path
+    if(!fs.existsSync(filePath)){
+      return res.json({ message: "Folder doesn't exist!" });
+    }
+
+    const fileList = fs.readdirSync(filePath)
+    if(fileList == '') {
+      return res.json({message: 'Empty folder'})
+    }
+
+    res.json(fileList)
+  } catch (e) {
+    console.log(e.message);
+    res.status(500).json({ message: "Server error" });
+  }
+}
+
+
+exports.uploadFile = async (req, res) => {
+  console.log("req file", req.file)
+  console.log("req originalname", req.file.originalname)
+  res.json({message: 'Successfully upload files'})
 }
