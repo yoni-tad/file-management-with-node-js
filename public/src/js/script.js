@@ -1,3 +1,32 @@
+document.addEventListener('DOMContentLoaded', async () => {
+  const domain = "http://localhost:3000";
+  const token = localStorage.getItem('token')
+
+  try {
+    const response = await fetch(`${domain}/api/auth/profile`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      }
+    })
+
+    const data = await response.json()
+    if (response.ok) {
+      console.log(data.message);
+      // document.getElementById("fullName").innerHTML = `${data.firstName} ${data.lastName}`;
+    } else {
+      console.log("Failed to fetch data");
+      window.location.href = `login.html?status=error&message=${data.message}`;
+    }
+  } catch (e) {
+    console.log(`Check User Status Error ${e}`);
+    window.location.href = "login.html";
+  }
+
+})
+
+
 async function uploadFile(e) {
   e.preventDefault();
 

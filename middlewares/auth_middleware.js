@@ -2,9 +2,8 @@ const jwt = require("jsonwebtoken");
 const User = require('../models/user_model')
 
 exports.Authenticate = async (req, res, next) => {
-  const token = req.headers.authorization?.split([" "])[1];
-
-  if (!token) {
+  const token = req.headers.authorization?.split(" ")[1];
+  if (!token) {    
     return res.status(404).json({ message: "Authentication required" });
   }
 
