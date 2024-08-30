@@ -41,6 +41,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   //   add path
   async function addPath() {
+    const pathDir = document.getElementById('pathDir')
+    const root = document.createElement('div')
+    root.innerHTML = `<a href="files.html" class="block transition hover:text-gray-700">/</a>`
+    pathDir.appendChild(root)
+
     const currentPath = localStorage.getItem('path')
     console.log('current path: ' + currentPath)
     const updatePath = localStorage.setItem('path', `${currentPath}docs/`)
