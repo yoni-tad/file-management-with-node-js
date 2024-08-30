@@ -1,18 +1,23 @@
 const multer = require("multer");
+const Authenticate = require("./auth_middleware");
+const dir = "uploads/";
 
-exports const FileUpload = {
-  const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, "upload/");
-    },
-    filename: function (req, file, cb) {
-      cb(null, file.originalname);
-    },
-  });
+FileUpload = async (req, res) => {
+  const user = await Authenticate.user
 
-  const upload = multer({ storage: storage });
-  upload.single("file")
+  console.log(user)
+}
 
-  console.log("req file", req.file);
-  res.json({ message: "Successfully uploaded single file" });
-};
+// const filePath = dir + email + path
+// const storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     cb(null, filePath);
+//   },
+//   filename: function (req, file, cb) {
+//     cb(null, file.originalname);
+//   },
+// });
+
+// const upload = multer({ storage: storage });
+
+module.exports = FileUpload
