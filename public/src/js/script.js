@@ -1,52 +1,63 @@
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener("DOMContentLoaded", async () => {
   const domain = "http://localhost:3000";
-  const token = localStorage.getItem('token')
+  const token = localStorage.getItem("token");
 
-  try {
-    const response = await fetch(`${domain}/api/auth/profile`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
+  checkUser()
+  document.getElementById("upload").addEventListener("click", uploadFile);
+
+  async function checkUser() {
+    try {
+      const response = await fetch(`${domain}/api/auth/profile`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        console.log(data.message);
+        const firstName = data.firstName;
+        const lastName = data.lastName;
+        const email = data.email;
+        // document.getElementById("fullName").innerHTML = `${data.firstName} ${data.lastName}`;
+      } else {
+        console.log("Failed to fetch data");
+        window.location.href = `login.html?status=error&message=${data.message}`;
       }
-    })
-
-    const data = await response.json()
-    if (response.ok) {
-      console.log(data.message);
-      // document.getElementById("fullName").innerHTML = `${data.firstName} ${data.lastName}`;
-    } else {
-      console.log("Failed to fetch data");
-      window.location.href = `login.html?status=error&message=${data.message}`;
+    } catch (e) {
+      console.log(`Check User Status Error ${e}`);
+      window.location.href = "login.html";
     }
-  } catch (e) {
-    console.log(`Check User Status Error ${e}`);
-    window.location.href = "login.html";
   }
 
-})
+  async function uploadFile(e) {
+    e.preventDefault();
+    checkUser()
 
+    console.log("upload clicked");
 
-async function uploadFile(e) {
-  e.preventDefault();
+    const file = document.getElementById("uploadFile");
+    const formData = new FormData();
+    formData.append("path", "/");
+    formData.append("email", email);
+    formData.append("file", file.files[0]);
 
-  console.log("upload clicked");
+    const response = await fetch(
+      "http://localhost:3000/api/file/upload-folder",
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
 
-  const file = document.getElementById("uploadFile");
-  const formData = new FormData();
-  formData.append("file", file.files[0])
-
-  const response = await fetch("http://localhost:3000/api/file/upload-folder", {
-    method: "POST",
-    body: formData,
-  });
-
-  const data = await response.json();
-  if (response.ok) {
-    console.log("Success: " + data.message);
-  } else {
-    console.log("Error: " + data.message);
+    const data = await response.json();
+    if (response.ok) {
+      console.log("Success: " + data.message);
+    } else {
+      console.log("Error: " + data.message);
+    }
   }
-}
 
-document.getElementById("upload").addEventListener("click", uploadFile);
+});

@@ -53,6 +53,7 @@ exports.getFiles = async (req, res) => {
 
 
 exports.uploadFile = async (req, res) => {
+  
   console.log("req file", req.file)
   console.log("req originalname", req.file.originalname)
   res.json({message: 'Successfully upload files'})
