@@ -1,6 +1,6 @@
 const fs = require("fs");
 const UserSchema = require("../models/user_model");
-const FolderSchema = require("../models/file_model");
+const FolderSchema = require("../models/folder_model");
 const jwt = require("jsonwebtoken");
 
 exports.Register = async (req, res) => {

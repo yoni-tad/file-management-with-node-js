@@ -18,9 +18,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       const data = await response.json();
       if (response.ok) {
         console.log(data.message);
-        const firstName = data.firstName;
-        const lastName = data.lastName;
-        const email = data.email;
+        globalThis.firstName = data.firstName;
+        globalThis.lastName = data.lastName;
+        globalThis.email = data.email;
         // document.getElementById("fullName").innerHTML = `${data.firstName} ${data.lastName}`;
       } else {
         console.log("Failed to fetch data");
@@ -34,7 +34,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   async function uploadFile(e) {
     e.preventDefault();
-    checkUser()
 
     console.log("upload clicked");
 

@@ -1,6 +1,7 @@
 const { json } = require("express");
 const fs = require("fs");
-const FolderSchema = require("../models/file_model");
+const FolderSchema = require("../models/folder_model");
+const FileSchema = require("../models/file_model")
 const dir = "uploads/";
 
 exports.createFolder = async (req, res) => {
@@ -51,10 +52,26 @@ exports.getFiles = async (req, res) => {
   }
 }
 
-
 exports.uploadFile = async (req, res) => {
-  
+  try {
+    const email = req.body.email
+    const storeFile = await FileSchema.create({
+      fileName: req.file.originalname,
+      filePath: req.file.destination,
+      size: req.file.size,
+      type: req.file.mimetype,
+      email: email
+    })
+
+    res.status(201).json({message: 'Successfully upload files'})
+  }catch (e) {
+    console.log(e.message);
+    res.status(500).json({ message: "Server error" });
+  }
+
   console.log("req file", req.file)
-  console.log("req originalname", req.file.originalname)
-  res.json({message: 'Successfully upload files'})
+}
+
+exports.DeleteFolder = async (req, res) => {
+  
 }

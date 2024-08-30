@@ -1,11 +1,19 @@
 const mongoose = require('mongoose')
 
-const FolderSchema = new mongoose.Schema({
-    folderName: {
+const FileSchema  = mongoose.Schema({
+    fileName: {
         type: String,
         require: true
-    }, 
-    folderPath: {
+    },
+    filePath: {
+        type: String,
+        require: true
+    },
+    size: {
+        type: Number,
+        require: true
+    },
+    type: {
         type: String,
         require: true
     },
@@ -15,4 +23,4 @@ const FolderSchema = new mongoose.Schema({
     }
 }, {timestamps: true})
 
-module.exports = mongoose.model('FolderSchema', FolderSchema)
+module.exports = mongoose.model("File", FileSchema)
