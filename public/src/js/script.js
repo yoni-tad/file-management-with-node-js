@@ -30,6 +30,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         globalThis.email = data.email;
         globalThis.quota = data.quota;
         globalThis.role = data.role;
+        localStorage.setItem("firstName", data.firstName);
+        localStorage.setItem("lastName", data.lastName);
+        localStorage.setItem("email", data.email);
+        localStorage.setItem("quota", data.quota);
+        localStorage.setItem("role", data.role);
         document.getElementById("fullName").textContent = `👋 Hi ${firstName}`;
       } else {
         console.log("Failed to fetch data");
@@ -161,7 +166,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Fetch files and folders
   async function fetchFile() {
     try {
-      checkUser();
+      const email = localStorage.getItem("email");
+      const firstName = localStorage.getItem("firstName");
+      const lastName = localStorage.getItem("lastName");
       const response = await fetch(`${domain}/api/file/get-folder`, {
         method: "POST",
         headers: {
@@ -169,7 +176,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         },
         body: JSON.stringify({
           path: "/",
-          email: "john@gmail.com",
+          email: email,
         }),
       });
 

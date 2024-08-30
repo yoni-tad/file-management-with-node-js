@@ -1,16 +1,26 @@
 document.addEventListener("DOMContentLoaded", async () => {
   const domain = "http://localhost:3000";
   const token = localStorage.getItem("token");
-
-  // const path = localStorage.setItem("path", "/");
-
-  
-
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.search);
-  const pathValue = params.get('path');
-  const path = pathValue == null ? '/' : `${pathValue}/`
-  console.log(path)
+  const pathValue = params.get("path");
+  var path = pathValue == null ? "/" : `${pathValue}/`;
+
+  if (pathValue != "/") {
+    var l = "";
+    path.split("/").forEach((item) => {
+      l = `${l + item}/`;
+      const pathDir = document.getElementById("pathDir");
+      const list = document.createElement("a");
+      list.href = `files.html?path=/${l
+        .replace("/", "")
+        .substring(0, l.replace("/", "").length - 1)}`;
+      list.textContent = `/${item}`;
+      pathDir.appendChild(list);
+    });
+  } else {
+    path = "/";
+  }
 
   fetchFiles(path);
   checkUser();
@@ -33,11 +43,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         globalThis.email = data.email;
         globalThis.quota = data.quota;
         globalThis.role = data.role;
-        localStorage.setItem('firstName', data.firstName)
-        localStorage.setItem('lastName', data.lastName)
-        localStorage.setItem('email', data.email)
-        localStorage.setItem('quota', data.quota)
-        localStorage.setItem('role', data.role)
+        localStorage.setItem("firstName", data.firstName);
+        localStorage.setItem("lastName", data.lastName);
+        localStorage.setItem("email", data.email);
+        localStorage.setItem("quota", data.quota);
+        localStorage.setItem("role", data.role);
 
         document.getElementById("quotaMB").textContent = `${
           Math.round((quota / (1024 * 1024)) * 10) / 10
@@ -61,9 +71,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Fetch folders and files
   async function fetchFiles(path) {
     try {
-      const email = localStorage.getItem('email')
-      const firstName = localStorage.getItem('firstName')
-      const lastName = localStorage.getItem('lastName')
+      const email = localStorage.getItem("email");
+      const firstName = localStorage.getItem("firstName");
+      const lastName = localStorage.getItem("lastName");
       const response = await fetch(`${domain}/api/file/get-folder`, {
         method: "POST",
         headers: {
@@ -75,14 +85,17 @@ document.addEventListener("DOMContentLoaded", async () => {
         }),
       });
 
-      const data = await response.json();
-      const tableBody = document.querySelector("#example tbody");
-      for (let i in data) {
-        const row = document.createElement("tr");
-        const nameCell = document.createElement("td");
+      if (response.ok) {
+        const data = await response.json();
+        const tableBody = document.querySelector("#example tbody");
+        for (let i in data) {
+          const row = document.createElement("tr");
+          const nameCell = document.createElement("td");
 
-        if (data[i].type == "folder") {
-          nameCell.innerHTML = `<a href='files.html?path=${path}${data[i].name}' id="folder"><div class="flex flex-row items-center">
+          if (data[i].type == "folder") {
+            nameCell.innerHTML = `<a href='files.html?path=${path}${
+              data[i].name
+            }' id="folder"><div class="flex flex-row items-center">
                                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 0 1 4.5 9.75h15A2.25 2.25 0 0 1 21.75 12v.75m-8.69-6.44-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z" />
                                   </svg> &nbsp; &nbsp; ${truncate(
@@ -90,28 +103,28 @@ document.addEventListener("DOMContentLoaded", async () => {
                                     30
                                   )}
                                 </div></a>`;
-        } else {
-          nameCell.innerHTML = `<div class="flex flex-row items-center">
+          } else {
+            nameCell.innerHTML = `<div class="flex flex-row items-center">
                                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
                                   </svg>
                                   &nbsp; &nbsp; ${truncate(data[i].name, 30)}
                                 </div>`;
-        }
+          }
 
-        const dateObj = new Date(data[i].date);
-        var year = dateObj.getFullYear();
-        const month = dateObj.toLocaleString("default", { month: "short" });
-        var date = dateObj.getDate();
-        const dateCell = document.createElement("td");
-        dateCell.textContent = `${month} ${date}, ${year}`;
+          const dateObj = new Date(data[i].date);
+          var year = dateObj.getFullYear();
+          const month = dateObj.toLocaleString("default", { month: "short" });
+          var date = dateObj.getDate();
+          const dateCell = document.createElement("td");
+          dateCell.textContent = `${month} ${date}, ${year}`;
 
-        const uploadByCell = document.createElement("td");
-        uploadByCell.classList.add("px-6", "py-4", "text-start");
-        uploadByCell.textContent = `${firstName} ${lastName}`;
+          const uploadByCell = document.createElement("td");
+          uploadByCell.classList.add("px-6", "py-4", "text-start");
+          uploadByCell.textContent = `${firstName} ${lastName}`;
 
-        const actionCell = document.createElement("td");
-        actionCell.innerHTML = `<div class="flex justify-center space-x-2">
+          const actionCell = document.createElement("td");
+          actionCell.innerHTML = `<div class="flex justify-center space-x-2">
                               <button
                                   class="flex items-center px-4 py-1 border border-gray-800 rounded-lg hover:border-green-400 relative group">
                                   <svg class="w-4 h-4"
@@ -156,13 +169,14 @@ document.addEventListener("DOMContentLoaded", async () => {
                               </button>
                           </div>`;
 
-        row.appendChild(nameCell);
-        row.appendChild(dateCell);
-        row.appendChild(uploadByCell);
-        row.appendChild(actionCell);
+          row.appendChild(nameCell);
+          row.appendChild(dateCell);
+          row.appendChild(uploadByCell);
+          row.appendChild(actionCell);
 
-        tableBody.appendChild(row);
-      }
+          tableBody.appendChild(row);
+        }
+      } 
     } catch (e) {
       console.log(`Error: ${e}`);
     }
