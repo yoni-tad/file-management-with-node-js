@@ -53,15 +53,14 @@ exports.getFiles = async (req, res) => {
         if(!folderInfo){
           return res.status(404).json({message: 'Folder not found!'})
         }
-        const info = {name: file, date: folderInfo.createdAt}
-        files.push(info)
-        console.log("Folder: " + info);
+        const info = {id: folderInfo._id, type: 'folder', name: file, date: folderInfo.createdAt}
+        files.unshift(info)
       } else {
         const fileInfo = await FileSchema.findOne({fileName: file, email: email, filePath: filePath})
         if(!fileInfo){
           return res.status(404).json({message: 'Folder not found!'})
         }
-        const info = {name: file, date: fileInfo.createdAt}
+        const info = {id: fileInfo._id, type: 'file', name: file, date: fileInfo.createdAt}
         files.push(info)
       }
     }
