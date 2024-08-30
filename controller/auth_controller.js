@@ -61,5 +61,7 @@ exports.Profile = async (req, res) => {
     firstName: req.user.firstName,
     lastName: req.user.lastName,
     email: req.user.email,
+    quota: req.user.quota,
+    role: req.user.role,
   })
 }

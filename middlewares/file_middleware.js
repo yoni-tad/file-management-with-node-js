@@ -1,5 +1,6 @@
 const multer = require("multer");
 const Authenticate = require("./auth_middleware");
+const UserSchema = require("../models/user_model");
 const dir = "uploads/";
 
 // FileUpload = async (req, res) => {
@@ -23,8 +24,13 @@ const dir = "uploads/";
 // const filePath = dir + email + path
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    const path = req.body.path
-    const email = req.body.email
+    const size = req.body.size;
+    const path = req.body.path;
+    const email = req.body.email;
+    if (size > 524288000) {
+      return;
+    }
+
     cb(null, dir + email + path);
   },
   filename: function (req, file, cb) {

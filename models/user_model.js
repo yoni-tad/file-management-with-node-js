@@ -19,6 +19,11 @@ const UserSchema = new mongoose.Schema({
         type: String,
         require: true
     },
+    quota: {
+        type: Number,
+        require: true,
+        default: 0
+    },
     role: {
         type: String,
         enum: ['user', 'premium', 'admin'],
