@@ -5,7 +5,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   const params = new URLSearchParams(url.search);
   const pathValue = params.get("path");
   var path = pathValue == null ? "/" : `${pathValue}/`;
-
   if (pathValue != "/") {
     var l = "";
     path.split("/").forEach((item) => {
@@ -24,6 +23,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   fetchFiles(path);
   checkUser();
+  create(path)
+  // createFolder(path, 'newFile')
 
   // Check user whether authenticated or not
   async function checkUser() {
@@ -88,6 +89,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (response.ok) {
         const data = await response.json();
         const tableBody = document.querySelector("#example tbody");
+        tableBody.innerHTML = "";
         for (let i in data) {
           const row = document.createElement("tr");
           const nameCell = document.createElement("td");
@@ -176,10 +178,50 @@ document.addEventListener("DOMContentLoaded", async () => {
 
           tableBody.appendChild(row);
         }
-      } 
+      }
     } catch (e) {
       console.log(`Error: ${e}`);
     }
     new DataTable("#example");
+  }
+
+  // create folder
+  function create(path) {
+    document.getElementById("newFolder").addEventListener("click", function () {
+      document.getElementById("newFolderModal").style.display = "block";
+    });
+    document
+      .getElementById("createFolder")
+      .addEventListener("click", function () {
+        const folderName = document.getElementById("folderName").value;
+        if (folderName == null) return;
+        createFolder(path, folderName);
+        document.getElementById("folderName").value = "";
+        document.getElementById("newFolderModal").style.display = "none";
+      });
+  }
+
+  async function createFolder(path, name) {
+    try {
+      const email = localStorage.getItem("email");
+      const response = await fetch(`${domain}/api/file/create-folder`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          path: path,
+          name: name,
+          email: email,
+        }),
+      });
+
+      if (response.ok) {
+        console.log("Folder created");
+      }
+    } catch (e) {
+      console.log(`Error: ${e}`);
+    }
+    fetchFiles(path);
   }
 });
