@@ -5,6 +5,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   checkUser();
   fetchFile();
   document.getElementById("uploadFile").onchange = uploadFile;
+  document.addEventListener("dragover", (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'copy';
+  });
+  document.addEventListener("drop", uploadDragFile);
 
   // Check user whether authenticated or not
   async function checkUser() {
@@ -24,6 +30,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         globalThis.email = data.email;
         globalThis.quota = data.quota;
         globalThis.role = data.role;
+        document.getElementById("fullName").textContent = `👋 Hi ${firstName}`;
       } else {
         console.log("Failed to fetch data");
         window.location.href = `login.html?status=error&message=${data.message}`;
@@ -34,11 +41,68 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
+  // upload file by drag
+  async function uploadDragFile(e) {
+    e.stopPropagation();
+    e.preventDefault();
+    document.getElementById("progressForm").style.display = "block";
+
+    const file = e.dataTransfer.files[0];
+    const fileName = file.name;
+    const fileSize = file.size;
+    const newQuota = quota + fileSize;
+
+    if (fileSize > 524288000) {
+      return console.log("Max upload upto 500 MB");
+    } else if (role == "user" && newQuota > 52428800) {
+      return console.log("Your quota is full use premium");
+    } else if (role == "premium" && newQuota > 157286400) {
+      return console.log("Your quota is full");
+    }
+
+    const formData = new FormData();
+    formData.append("size", fileSize);
+    formData.append("path", "/");
+    formData.append("email", email);
+    formData.append("file", file);
+
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", `${domain}/api/file/upload-folder`, true);
+    xhr.upload.onprogress = function (event) {
+      if (event.lengthComputable) {
+        const percentComplete = Math.round((event.loaded / event.total) * 100);
+        document.getElementById("fileName").innerText = fileName;
+        document.getElementById("fileSize").innerText = `${(
+          fileSize /
+          (1024 * 1024)
+        ).toFixed(2)} MB`;
+        document.getElementById(
+          "percentBar"
+        ).style.width = `${percentComplete}%`;
+        document.getElementById(
+          "percentValue"
+        ).innerText = `${percentComplete}%`;
+      }
+    };
+    xhr.onload = function () {
+      if (xhr.status === 201) {
+        fetchFile();
+      } else {
+        console.log("Error:", JSON.parse(xhr.responseText).message);
+      }
+    };
+
+    xhr.onerror = function () {
+      console.error("Upload failed.");
+    };
+
+    xhr.send(formData);
+  }
+
   // Upload files
   async function uploadFile(e) {
+    e.stopPropagation();
     e.preventDefault();
-
-    console.log("upload started");
     document.getElementById("progressForm").style.display = "block";
 
     const fileInput = document.getElementById("uploadFile");
@@ -111,7 +175,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       const data = await response.json();
       const tableBody = document.querySelector("#fileInfo tbody");
-      tableBody.innerHTML = '';
+      tableBody.innerHTML = "";
       for (let i in data) {
         const row = document.createElement("tr");
         row.classList.add(

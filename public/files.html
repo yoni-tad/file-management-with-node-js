@@ -44,42 +44,10 @@
                                 </a>
                             </li>
 
-                            <li class="rtl:rotate-180">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    class="size-4"
-                                    viewBox="0 0 20 20"
-                                    fill="currentColor">
-                                    <path
-                                        fill-rule="evenodd"
-                                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                        clip-rule="evenodd" />
-                                </svg>
-                            </li>
-
                             <li>
                                 <a href="#"
                                     class="block transition hover:text-gray-700">
-                                    Shirts </a>
-                            </li>
-
-                            <li class="rtl:rotate-180">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    class="size-4"
-                                    viewBox="0 0 20 20"
-                                    fill="currentColor">
-                                    <path
-                                        fill-rule="evenodd"
-                                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                        clip-rule="evenodd" />
-                                </svg>
-                            </li>
-
-                            <li>
-                                <a href="#"
-                                    class="block transition hover:text-gray-700">
-                                    Plain Tee </a>
+                                    /docs/</a>
                             </li>
                         </ol>
                     </nav>
@@ -90,8 +58,8 @@
                         <div><span class="text-sm font-bold">Total
                                 storage</span></div>
                         <div><p class="text-sm"><span
-                                    class="text-5xl font-bold">100GB</span> of
-                                200GB</p></div>
+                                    class="text-5xl font-bold" id="quotaMB">00.0 MB</span> of
+                                <span id="totalQuota">0 MB</span></p></div>
                     </div>
                     <div class="flex flex-row">
                         <button
@@ -611,5 +579,7 @@
                 // $('footer').load("./src/include/footer.html");
             });
         </script>
+
+        <script src="./src/js/files.js"></script>
     </body>
 </html>
