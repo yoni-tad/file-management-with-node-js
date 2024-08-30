@@ -46,7 +46,27 @@ exports.getFiles = async (req, res) => {
       return res.json({ message: "Empty folder" });
     }
 
-    res.json(fileList);
+    const files = [];
+    for (const file of fileList) {
+      if (fs.lstatSync(filePath + file).isDirectory()) {
+        const folderInfo = await FolderSchema.findOne({folderName: file, email: email, folderPath: path})
+        if(!folderInfo){
+          return res.status(404).json({message: 'Folder not found!'})
+        }
+        const info = {name: file, date: folderInfo.createdAt}
+        files.push(info)
+        console.log("Folder: " + info);
+      } else {
+        const fileInfo = await FileSchema.findOne({fileName: file, email: email, filePath: filePath})
+        if(!fileInfo){
+          return res.status(404).json({message: 'Folder not found!'})
+        }
+        const info = {name: file, date: fileInfo.createdAt}
+        files.push(info)
+      }
+    }
+
+    res.json(files);
   } catch (e) {
     console.log(e.message);
     res.status(500).json({ message: "Server error" });
@@ -62,7 +82,7 @@ exports.uploadFile = async (req, res) => {
     }
 
     const quota = user.quota + req.file.size;
-        
+
     const updateQuota = await UserSchema.updateOne(
       {
         email: email,

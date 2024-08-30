@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   checkUser();
   document.getElementById("uploadFile").onchange = uploadFile;
 
+  // Check user whether authenticated or not
   async function checkUser() {
     try {
       const response = await fetch(`${domain}/api/auth/profile`, {
@@ -23,7 +24,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         globalThis.email = data.email;
         globalThis.quota = data.quota;
         globalThis.role = data.role;
-        // document.getElementById("fullName").innerHTML = `${data.firstName} ${data.lastName}`;
       } else {
         console.log("Failed to fetch data");
         window.location.href = `login.html?status=error&message=${data.message}`;
@@ -34,6 +34,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
+  // Upload files
   async function uploadFile(e) {
     e.preventDefault();
 

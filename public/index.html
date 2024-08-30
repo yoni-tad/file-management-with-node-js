@@ -73,7 +73,9 @@
                 </div>
 
                 <!-- Progress form -->
-                <div id="progressForm" class="my-4 p-4 border border-grey-400 rounded-lg" style="display: none;">
+                <div id="progressForm"
+                    class="my-4 p-4 border border-grey-400 rounded-lg"
+                    style="display: none;">
                     <div class="mb-2 flex justify-between items-center">
                         <div class="flex items-center gap-x-3">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -85,8 +87,10 @@
                             </svg>
                             <div>
                                 <p
-                                    class="text-sm font-medium text-gray-800" id="fileName"></p>
-                                <p class="text-xs text-gray-500" id="fileSize">0</p>
+                                    class="text-sm font-medium text-gray-800"
+                                    id="fileName"></p>
+                                <p class="text-xs text-gray-500"
+                                    id="fileSize">0</p>
                             </div>
                         </div>
                     </div>
@@ -101,7 +105,8 @@
                                 style="width: 0%"></div>
                         </div>
                         <div class="w-6 text-end">
-                            <span class="text-sm text-gray-800" id="percentValue">0%</span>
+                            <span class="text-sm text-gray-800"
+                                id="percentValue">0%</span>
                         </div>
                     </div>
                 </div>
@@ -217,6 +222,25 @@
                     </table>
                 </div>
 
+                
+
+                <aside id="popAlert"
+                    class="fixed bottom-4 end-4 z-50 flex items-center justify-center gap-4 rounded-lg bg-black px-5 py-3 text-white">
+                    <a href="#" target="_blank" rel="noreferrer"
+                        class="text-sm font-medium hover:opacity-75">
+                        Hey! Come Check This 50% off👋
+                    </a>
+                    <button class="rounded bg-white/20 p-1 hover:bg-white/10" onclick="document.getElementById('popAlert').style.display = 'none'">
+                        <span class="sr-only">Close</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="size-4"
+                            viewBox="0 0 20 20" fill="currentColor">
+                            <path
+                                fillRule="evenodd"
+                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                clipRule="evenodd" />
+                        </svg>
+                    </button>
+                </aside>
             </div>
         </div>
 
