@@ -130,8 +130,8 @@ document.addEventListener("DOMContentLoaded", async () => {
           const actionCell = document.createElement("td");
           if (data[i].type == "folder") {
             actionCell.innerHTML = `<div class="flex justify-end space-x-2">
-            <button data-id=${data[i].id}
-                class="flex items-center px-4 py-1 border border-gray-800 rounded-lg hover:border-blue-400 relative group">
+            <button data-id=${data[i].id} data-value=${data[i].name}
+                class="flex items-center px-4 py-1 border border-gray-800 rounded-lg hover:border-blue-400 relative group renameFolderBtn">
                 <svg class="w-4 h-4"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none" viewBox="0 0 24 24"
@@ -142,7 +142,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                         d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
                 </svg>
                 <span
-                    class="absolute bottom-full mb-2 hidden group-hover:block px-2 py-1 text-xs text-white bg-black rounded">Edit</span>
+                    class="absolute bottom-full mb-2 hidden group-hover:block px-2 py-1 text-xs text-white bg-black rounded">Rename</span>
             </button>
             <button data-id=${data[i].id} id="deleteFolderBtn"
                 class="flex items-center px-4 py-1 border border-gray-800 rounded-lg hover:border-red-400 relative group deleteFolderBtn">
@@ -322,17 +322,55 @@ document.addEventListener("DOMContentLoaded", async () => {
     xhr.send(formData);
   }
 
-  // Delete folder
-  // delete folders and files
+  
+  // Delete and edit handler
   document.querySelector("#example tbody").addEventListener("click", (e) => {
     if (e.target.classList.contains("deleteFolderBtn")) {
       const id = e.target.getAttribute("data-id");
       document.getElementById("deleteModal").style.display = "block";
       const deleteModalBtn = document.getElementById("deleteModalBtn");
       deleteModalBtn.setAttribute("data-id", id);
+    } else if (e.target.classList.contains("renameFolderBtn")) {
+      const id = e.target.getAttribute("data-id");
+      const folderName = e.target.getAttribute("data-value");
+      document.getElementById('editFolderModal').style.display = 'block'
+      document.getElementById('renameFolder').value = folderName
+      const deleteModalBtn = document.getElementById("renameFolderSave");
+      deleteModalBtn.setAttribute("data-id", id);
     }
   });
 
+  //  Rename folder
+  document.getElementById("renameFolderSave").addEventListener('click', (e) => {
+    const id = e.target.getAttribute("data-id");
+    const rename = document.getElementById('renameFolder').value
+    if(rename == null) return
+    renameFolder(id, rename)
+  })
+
+  async function renameFolder(id, name) {
+    try {
+      const response = await fetch(`${domain}/api/file/rename-folder`, {
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          id: id,
+          name: name
+        })
+      });
+
+      if (response.ok) {
+        console.log("Folder renamed");
+        window.location.href = "files.html";
+      }
+    } catch (e) {
+      console.log(`Error: ${e}`);
+    }
+  }
+
+  // Delete folder
   document.getElementById("deleteModalBtn").addEventListener("click", (e) => {
     const id = e.target.getAttribute("data-id");
     deleteFolder(id);
@@ -343,7 +381,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       const response = await fetch(`${domain}/api/file/delete-folder/${id}`);
 
       if (response.ok) {
-        console.log("Delete folder: " + id);
+        console.log("Folder deleted");
         window.location.href = "files.html";
       }
     } catch (e) {

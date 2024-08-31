@@ -122,6 +122,29 @@ exports.uploadFile = async (req, res) => {
   }
 };
 
+exports.RenameFolder = async (req, res) => {
+  try {
+    const {id, name} = req.body
+
+    const folder = await FolderSchema.findById(id)
+    if(!folder) return res.status(404).json({message: 'Folder not found!'})
+    const folderPath = folder.folderPath;
+    const folderName = folder.folderName;
+    const email = folder.email;
+    const path = dir + email + folderPath + folderName
+    const newPath = dir + email + folderPath + name
+    console.log('path: '+ path)
+    console.log('newPath: '+ newPath)
+    fs.rename(path, newPath, (err) => console.log(err))
+
+    const response = await FolderSchema.findByIdAndUpdate(id, {folderName: name})
+    res.json({ message: "Folder successfully renamed" });
+  } catch (e) {
+    console.log(e.message);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 exports.DeleteFolder = async (req, res) => {
   try {
     const id = req.params.id;
@@ -132,7 +155,7 @@ exports.DeleteFolder = async (req, res) => {
     const folderName = folder.folderName;
     const email = folder.email;
     const path = dir + email + folderPath + folderName;
-    fs.rmSync(path, {recursive: true, force: true})
+    fs.rmSync(path, { recursive: true, force: true });
 
     const files = await FileSchema.find({ filePath: `${path}/` });
     var total = 0;
@@ -143,14 +166,14 @@ exports.DeleteFolder = async (req, res) => {
 
     const user = await UserSchema.findOne({ email: email });
     const quota = user.quota;
-    const totalQuota = quota - total
+    const totalQuota = quota - total;
     const quotaUpdate = await UserSchema.findOneAndUpdate(
       { email: email },
       { quota: totalQuota }
     );
-    const deleteFiles = await FileSchema.deleteMany({ filePath: `${path}/` })
+    const deleteFiles = await FileSchema.deleteMany({ filePath: `${path}/` });
 
-    const response = await FolderSchema.findByIdAndDelete(id)
+    const response = await FolderSchema.findByIdAndDelete(id);
     res.json({ message: "Folder successfully deleted" });
   } catch (e) {
     console.log(e.message);
