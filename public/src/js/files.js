@@ -244,8 +244,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (fileSize > 524288000) {
       return console.log("Max upload upto 500 MB");
     } else if (role == "user" && newQuota > 52428800) {
+      document.getElementById("progressForm").style.display = "none";
+      document.getElementById("subscribeAlert").style.display = "block";
       return console.log("Your quota is full use premium" + newQuota);
     } else if (role == "premium" && newQuota > 157286400) {
+      document.getElementById("progressForm").style.display = "none";
+      document.getElementById("subscribeAlert").style.display = "block";
       return console.log("Your quota is full");
     }
 
