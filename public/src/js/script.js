@@ -191,9 +191,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       const data = await response.json();      
       const tableBody = document.querySelector("#fileInfo tbody");
       tableBody.innerHTML = "";
+      document.getElementById('emptyFolder').style.display = 'none'
 
       if(data.message == 'Empty folder'){
-        tableBody.innerHTML = `<div class="flex flex-row items-center"><span class="text-center my-4 text-2xl font-bold">Empty folder</span></div>`
+        document.getElementById('emptyFolder').style.display = 'block'
       } else {
       for (let i in data) {
         const row = document.createElement("tr");
