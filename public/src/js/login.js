@@ -21,7 +21,7 @@ async function Login(e) {
     const data = await response.json();
     if (response.ok) {
       localStorage.setItem('token', data);
-      window.location.href = 'index.html'
+      window.location.href = 'home.html'
     } else {
       console.log("Error: " + data.message);
     }

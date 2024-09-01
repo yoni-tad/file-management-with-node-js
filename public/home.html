@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>File Management</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+            integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    </head>
+    <body>
+        <div class="flex h-screen">
+            <header></header>
+            <div class="flex-1 p-8">
+                <!-- Greeting and title -->
+                <span class="text-3xl font-bold" id="fullName">👋 Hi</span>
+                <div class="flex flex-row items-center justify-between py-6">
+                    <div class="flex flex-col">
+                        <div><span class="text-2xl font-bold">Files and
+                                assets</span></div>
+                        <div><span>Documents and attachments that have been
+                                uploaded as part of this project.</span></div>
+                    </div>
+                    <div>
+                        <button
+                            class="bg-gray-800 hover:bg-gray-600 text-white px-4 py-1.5 rounded-lg flex relative group cursor-not-allowed">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="size-6">
+                                <path stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M12 4.5v15m7.5-7.5h-15" />
+                            </svg>
+                            <span class="px-2">Invite team</span>
+                            <span
+                                class="absolute bottom-full mb-2 hidden group-hover:block px-2 py-1 text-xs text-white bg-black rounded">Coming
+                                soon...</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Upload file -->
+                <div class="flex items-center justify-center w-full">
+                    <label for="uploadFile"
+                        class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+                        <div
+                            class="flex flex-col items-center justify-center pt-5 pb-6">
+                            <svg
+                                class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
+                                aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none" viewBox="0 0 20 16">
+                                <path stroke="currentColor"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round" stroke-width="2"
+                                    d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
+                            </svg>
+                            <p
+                                class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span
+                                    class="font-semibold">Click to
+                                    upload</span> or drag and drop</p>
+                            <p
+                                class="text-xs text-gray-500 dark:text-gray-400">SVG,
+                                PNG, JPG or GIF (500 MB)</p>
+                        </div>
+                        <form method="POST" id="fileForm"
+                            enctype="multipart/form-data">
+                            <input id="uploadFile" type="file" class="hidden">
+                        </form>
+                    </label>
+                </div>
+
+                <!-- Progress form -->
+                <div id="progressForm"
+                    class="my-4 p-4 border border-grey-400 rounded-lg"
+                    style="display: none;">
+                    <div class="mb-2 flex justify-between items-center">
+                        <div class="flex items-center gap-x-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="size-6">
+                                <path stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" />
+                            </svg>
+                            <div>
+                                <p
+                                    class="text-sm font-medium text-gray-800"
+                                    id="fileName"></p>
+                                <p class="text-xs text-gray-500"
+                                    id="fileSize">0</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-x-3 whitespace-nowrap">
+                        <div
+                            class="flex w-full h-2 bg-gray-200 rounded-full overflow-hidden"
+                            role="progressbar" aria-valuenow="100"
+                            aria-valuemin="0" aria-valuemax="100">
+                            <div
+                                id="percentBar"
+                                class="flex flex-col justify-center rounded-full overflow-hidden bg-teal-500 text-xs text-white text-center whitespace-nowrap transition duration-500"
+                                style="width: 0%"></div>
+                        </div>
+                        <div class="w-6 text-end">
+                            <span class="text-sm text-gray-800"
+                                id="percentValue">0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Subscribe to premium  -->
+                <div role="alert" id="subscribeAlert" style="display: none;"
+                    class="rounded-xl border border-gray-100 bg-gray-800 text-white p-4 my-2">
+                    <div class="flex items-start gap-4">
+                        <span class="text-yellow-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="size-6">
+                                <path stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z" />
+                            </svg>
+                        </span>
+                        <div class="flex-1">
+                            <strong class="block font-medium">Unlock More Space
+                                and Features!</strong>
+
+                            <p class="mt-1 text-sm">You’ve reached your current
+                                plan’s limit! Upgrade now to enjoy more storage,
+                                advanced tools, and enhanced security features.
+                                Don’t let limits hold you back!</p>
+
+                            <div class="mt-4 flex gap-2">
+                                <a
+                                    href="pricing.html"
+                                    class="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700">
+                                    <span class="text-sm"> Upgrade to Premium
+                                    </span>
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke-width="1.5"
+                                        stroke="currentColor"
+                                        class="size-4">
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                                    </svg>
+                                </a>
+                                <button
+                                    onclick="document.getElementById('subscribeAlert').style.display='none'"
+                                    class="block rounded-lg px-4 py-2 transition hover:bg-gray-600">
+                                    <span class="text-sm">Close</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <button
+                            onclick="document.getElementById('subscribeAlert').style.display='none'"
+                            class="transition hover:text-gray-600">
+                            <span class="sr-only">Dismiss popup</span>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="1.5"
+                                stroke="currentColor"
+                                class="size-6">
+                                <path stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div
+                    class="relative overflow-x-auto shadow-md sm:rounded-lg my-8">
+                    <div
+                        class="flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
+                        <div>
+                            <div class="flex flex-col">
+                                <div><span class="text-2xl font-bold">Attached
+                                        file</span></div>
+                                <div><span>Files and assets that have been
+                                        attached to
+                                        this project.</span></div>
+                            </div>
+                        </div>
+                        <label for="table-search" class="sr-only">Search</label>
+                        <div class="relative">
+                            <div
+                                class="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none">
+                                <svg
+                                    class="w-5 h-5 text-gray-500 dark:text-gray-400"
+                                    aria-hidden="true" fill="currentColor"
+                                    viewBox="0 0 20 20"
+                                    xmlns="http://www.w3.org/2000/svg"><path
+                                        fill-rule="evenodd"
+                                        d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                                        clip-rule="evenodd"></path></svg>
+                            </div>
+                            <input type="text" id="table-search"
+                                class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 focus:border-gray-500"
+                                placeholder="Search for files">
+                        </div>
+                    </div>
+                    <table id="fileInfo"
+                        class="w-full text-sm text-left text-gray-700 bg-white border-collapse border">
+                        <thead
+                            class="text-xs text-gray-700 uppercase bg-gray-100">
+                            <tr>
+                                <th scope="col"
+                                    class="px-6 py-3 text-start">File
+                                    name</th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-start">Type</th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-start">uploaded
+                                    Date</th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-start">Uploaded
+                                    by</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Empty folder -->
+                 <div class="flex justify-center items-center " id="emptyFolder" style="display: none;">
+                    <span class="text-center my-4 text-xl">Empty folder</span>
+                 </div>
+
+                <aside id="popAlert"
+                    class="fixed bottom-4 end-4 z-50 flex items-center justify-center gap-4 rounded-lg bg-black px-5 py-3 text-white">
+                    <a href="pricing.html" target="_blank" rel="noreferrer"
+                        class="text-sm font-medium hover:opacity-75">
+                        Hey! Come Check This 50% off👋
+                    </a>
+                    <button class="rounded bg-white/20 p-1 hover:bg-white/10"
+                        onclick="document.getElementById('popAlert').style.display = 'none'">
+                        <span class="sr-only">Close</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="size-4"
+                            viewBox="0 0 20 20" fill="currentColor">
+                            <path
+                                fillRule="evenodd"
+                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                clipRule="evenodd" />
+                        </svg>
+                    </button>
+                </aside>
+            </div>
+        </div>
+
+        <script>
+            $(document).ready(function(){
+                $('header').load("./src/include/side_menu.html");
+            });
+        </script>
+        <script src="./src/js/script.js"></script>
+    </body>
+</html>
