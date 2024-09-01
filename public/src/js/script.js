@@ -193,7 +193,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       tableBody.innerHTML = "";
 
       if(data.message == 'Empty folder'){
-        tableBody.innerHTML = `<div class="flex flex-row items-center"><span class="text-center my-4 text-4xl font-bold">Empty folder</span></div>`
+        tableBody.innerHTML = `<div class="flex flex-row items-center"><span class="text-center my-4 text-2xl font-bold">Empty folder</span></div>`
       } else {
       for (let i in data) {
         const row = document.createElement("tr");
