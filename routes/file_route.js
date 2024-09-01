@@ -5,6 +5,8 @@ const {
   uploadFile,
   DeleteFolder,
   RenameFolder,
+  RenameFile,
+  DeleteFile,
 } = require("../controller/file_controller");
 const fileRoute = express.Router();
 const { Authenticate } = require("../middlewares/auth_middleware");
@@ -20,6 +22,10 @@ fileRoute.post("/create-folder", createFolder);
 fileRoute.post("/rename-folder", RenameFolder)
 
 fileRoute.get("/delete-folder/:id", DeleteFolder)
+
+fileRoute.post("/rename-file", RenameFile)
+
+fileRoute.get("/delete-file/:id", DeleteFile)
 
 
 

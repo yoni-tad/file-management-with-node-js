@@ -124,21 +124,43 @@ exports.uploadFile = async (req, res) => {
 
 exports.RenameFolder = async (req, res) => {
   try {
-    const {id, name} = req.body
+    const { id, name } = req.body;
 
-    const folder = await FolderSchema.findById(id)
-    if(!folder) return res.status(404).json({message: 'Folder not found!'})
+    const folder = await FolderSchema.findById(id);
+    if (!folder) return res.status(404).json({ message: "Folder not found!" });
     const folderPath = folder.folderPath;
     const folderName = folder.folderName;
     const email = folder.email;
-    const path = dir + email + folderPath + folderName
-    const newPath = dir + email + folderPath + name
-    console.log('path: '+ path)
-    console.log('newPath: '+ newPath)
-    fs.rename(path, newPath, (err) => console.log(err))
+    const path = dir + email + folderPath + folderName;
+    const newPath = dir + email + folderPath + name;
+    console.log("path: " + path);
+    console.log("newPath: " + newPath);
+    fs.rename(path, newPath, (err) => console.log(err));
 
-    const response = await FolderSchema.findByIdAndUpdate(id, {folderName: name})
+    const response = await FolderSchema.findByIdAndUpdate(id, {
+      folderName: name,
+    });
     res.json({ message: "Folder successfully renamed" });
+  } catch (e) {
+    console.log(e.message);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+exports.RenameFile = async (req, res) => {
+  try {
+    const { id, name } = req.body;
+
+    const file = await FileSchema.findById(id);
+    if (!file) return res.status(404).json({ message: "File not found!" });
+    const fileName = file.fileName;
+    const filePath = file.filePath;
+    const path = filePath + fileName;
+    const newPath = filePath + name;
+    fs.rename(path, newPath, (err) => console.log(err));
+
+    const response = await FileSchema.findByIdAndUpdate(id, { fileName: name });
+    res.json({ message: "File successfully renamed" });
   } catch (e) {
     console.log(e.message);
     res.status(500).json({ message: "Server error" });
@@ -175,6 +197,35 @@ exports.DeleteFolder = async (req, res) => {
 
     const response = await FolderSchema.findByIdAndDelete(id);
     res.json({ message: "Folder successfully deleted" });
+  } catch (e) {
+    console.log(e.message);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+exports.DeleteFile = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const file = await FileSchema.findById(id);
+    if (!file) return res.status(404).json({ message: "File not found!" });
+
+    const fileName = file.fileName;
+    const filePath = file.filePath;
+    const size = file.size;
+    const email = file.email;
+    const path = filePath + fileName;
+    fs.rmSync(path, { recursive: true, force: true });
+
+    const user = await UserSchema.findOne({ email: email });
+    const quota = user.quota;
+    const totalQuota = quota - size;
+    const quotaUpdate = await UserSchema.findOneAndUpdate(
+      { email: email },
+      { quota: totalQuota }
+    );
+
+    const response = await FileSchema.findByIdAndDelete(id);
+    res.json({ message: "File successfully deleted" });
   } catch (e) {
     console.log(e.message);
     res.status(500).json({ message: "Server error" });
