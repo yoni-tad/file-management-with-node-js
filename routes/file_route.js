@@ -7,6 +7,7 @@ const {
   RenameFolder,
   RenameFile,
   DeleteFile,
+  DownloadFile,
 } = require("../controller/file_controller");
 const fileRoute = express.Router();
 const { Authenticate } = require("../middlewares/auth_middleware");
@@ -27,6 +28,6 @@ fileRoute.post("/rename-file", RenameFile)
 
 fileRoute.get("/delete-file/:id", DeleteFile)
 
-
+fileRoute.get("/download-file/:id", DownloadFile)
 
 module.exports = fileRoute;

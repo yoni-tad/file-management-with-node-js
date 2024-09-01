@@ -43,7 +43,7 @@ exports.getFiles = async (req, res) => {
 
     const fileList = fs.readdirSync(filePath);
     if (fileList == "") {
-      return res.json({ message: "Empty folder" });
+      return res.status(404).json({ message: "Empty folder" });
     }
 
     const files = [];
@@ -71,12 +71,13 @@ exports.getFiles = async (req, res) => {
           filePath: filePath,
         });
         if (!fileInfo) {
-          return res.status(404).json({ message: "Folder not found!" });
+          return res.status(404).json({ message: "File not found!" });
         }
         const info = {
           id: fileInfo._id,
           type: "file",
           name: file,
+          fileType: fileInfo.type,
           date: fileInfo.createdAt,
         };
         files.push(info);
@@ -230,4 +231,17 @@ exports.DeleteFile = async (req, res) => {
     console.log(e.message);
     res.status(500).json({ message: "Server error" });
   }
+};
+
+exports.DownloadFile = async (req, res) => {
+  const id = req.params.id;
+  const file = await FileSchema.findById(id);
+  if (!file) return res.status(404).json({ message: "File not found!" });
+
+  const fileName = file.fileName;
+  const filePath = file.filePath;
+  const path = `C:/Users/beti/Documents/node/file-management/` + filePath + fileName;
+
+  
+  res.download(path, fileName)
 };

@@ -160,9 +160,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             </button>
         </div>`;
           } else {
-            actionCell.innerHTML = `<div class="flex justify-center space-x-2">
+            actionCell.innerHTML = `<div class="flex justify-end space-x-2">
                               <button data-id=${data[i].id} 
-                                  class="flex items-center px-4 py-1 border border-gray-800 rounded-lg hover:border-green-400 relative group">
+                                  class="flex items-center px-4 py-1 border border-gray-800 rounded-lg hover:border-green-400 relative group downloadFile">
                                   <svg class="w-4 h-4"
                                       xmlns="http://www.w3.org/2000/svg"
                                       fill="none" viewBox="0 0 24 24"
@@ -349,6 +349,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       document.getElementById("deleteFileModal").style.display = "block";
       const deleteModalBtn = document.getElementById("deleteFileModalBtn");
       deleteModalBtn.setAttribute("data-id", id);
+    } else if (e.target.classList.contains("downloadFile")) {
+      const id = e.target.getAttribute("data-id");
+      downloadFile(id)
     } 
   });
 
@@ -431,7 +434,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
-  // Rename folder
+  // Delete file
   document.getElementById("deleteFileModalBtn").addEventListener("click", (e) => {
     const id = e.target.getAttribute("data-id");
     deleteFile(id);
@@ -448,5 +451,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     } catch (e) {
       console.log(`Error: ${e}`);
     }
+  }
+
+  // Download file
+  async function downloadFile(id) {
+    try {
+      const response = await fetch(`${domain}/api/file/download-file/${id}`);
+      window.location.href = `${domain}/api/file/download-file/${id}`
+    } catch (e) {
+      console.log(`Error: ${e}`);
+    }    
   }
 });
