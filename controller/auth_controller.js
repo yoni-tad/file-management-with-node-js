@@ -2,6 +2,7 @@ const fs = require("fs");
 const UserSchema = require("../models/user_model");
 const FolderSchema = require("../models/folder_model");
 const jwt = require("jsonwebtoken");
+const ContactSchema = require("../models/contact_model");
 
 exports.Register = async (req, res) => {
   const { firstName, lastName, email, password } = req.body;
@@ -39,7 +40,7 @@ exports.Login = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    
+
     const passwordMatch = await user.comparePassword(password);
     if (!passwordMatch) {
       return res.status(401).json({ message: "Incorrect password" });
@@ -48,7 +49,7 @@ exports.Login = async (req, res) => {
     const token = await jwt.sign({ user: user._id }, process.env.SECRET_KEY, {
       expiresIn: "1 hour",
     });
-    res.json(token)
+    res.json(token);
   } catch (e) {
     console.log(e.message);
     res.status(500).json({ message: "Server error" });
@@ -63,5 +64,23 @@ exports.Profile = async (req, res) => {
     email: req.user.email,
     quota: req.user.quota,
     role: req.user.role,
-  })
-}
+  });
+};
+
+exports.Contact = async (req, res) => {
+  const { name, email, phone, message } = req.body;
+
+  try {
+    const response = await ContactSchema.create({
+      name: name,
+      email: email,
+      phone: phone,
+      message: message,
+    });
+
+    res.status(201).json({ message: "Your message sent!" });
+  } catch (e) {
+    console.log(e.message);
+    res.status(500).json({ message: "Server error" });
+  }
+};

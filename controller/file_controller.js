@@ -87,7 +87,7 @@ exports.getFiles = async (req, res) => {
     res.json(files);
   } catch (e) {
     console.log(e.message);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: `Server error` });
   }
 };
 
