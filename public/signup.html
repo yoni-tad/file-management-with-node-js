@@ -1,95 +1,250 @@
 <!DOCTYPE html>
 <html lang="en">
+
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>File Management</title>
-        <script src="https://cdn.tailwindcss.com"></script>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Sign In | FileFrame</title>
+        <link rel="shortcut icon" href="assets/images/favicon.png"
+            type="image/x-icon" />
+        <link rel="stylesheet" href="assets/css/animate.css" />
+        <link rel="stylesheet" href="assets/css/tailwind.css" />
+
+        <!-- ==== WOW JS ==== -->
+        <script src="assets/js/wow.min.js"></script>
+        <script> new WOW().init();</script>
+        <!-- Toastr CSS -->
+        <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"
+            rel="stylesheet">
+        <!-- jQuery (required by Toastr) -->
         <script
-            src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
-            integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
-            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <!-- Toastr JS -->
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     </head>
-    <body>
-        <section class="bg-gray-50">
-            <div
-                class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-                <a href="#"
-                    class="flex items-center mb-6 text-2xl font-semibold text-gray-900">
-                    <span
-                        class="grid size-10 place-content-center rounded-lg bg-gray-200 text-lg text-blue-600 mx-2">
-                        F
-                    </span>
-                    File Management
-                </a>
-                <div
-                    class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
-                    <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
-                        <h1
-                            class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-                            Sign up
-                        </h1>
-                        <form class="space-y-4 md:space-y-6">
-                            <div class="flex flex row gap-4">
-                                <div>
-                                    <label for="firstName"
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">First Name</label>
-                                    <input type="firstName" name="firstName" id="firstName"
-                                        class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                        placeholder="John" required>
-                                </div>
-                                <div>
-                                    <label for="lastName"
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Last Name</label>
-                                    <input type="lastName" name="lastName" id="lastName"
-                                        class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                        placeholder="Doe" required>
-                                </div>
-                            </div>
-                            <div>
-                                <label for="email"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
-                                <input type="email" name="email" id="email"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                    placeholder="name@company.com" required>
-                            </div>
-                            <div>
-                                <label for="password"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
-                                <input type="password" name="password"
-                                    id="password" placeholder="••••••••"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                    required>
-                            </div>
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-start">
-                                    <div class="flex items-center h-5">
-                                        <input id="remember"
-                                            aria-describedby="remember"
-                                            type="checkbox"
-                                            class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
-                                            required>
+
+    <body class="bg-[#F4F7FF]">
+        <!-- ====== Forms Section Start -->
+        <section class="bg-[#F4F7FF] py-14 lg:py-20 dark:bg-dark">
+            <div class="container">
+                <div class="flex flex-wrap -mx-4">
+                    <div class="w-full px-4">
+                        <div
+                            class="wow fadeInUp relative mx-auto max-w-[525px] overflow-hidden rounded-lg bg-white dark:bg-dark-2 py-14 px-8 text-center sm:px-12 md:px-[60px]"
+                            data-wow-delay=".15s">
+                            <div class="mb-10 text-center">
+                                <a href="index.html"
+                                    class="mx-auto inline-block max-w-[160px]">
+                                    <div class="flex flex-row items-end">
+                                        <svg class="w-32 h-32 text-4xl"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="1em" height="1em"
+                                            viewBox="0 0 24 24"><path
+                                                fill="#2724ff"
+                                                d="M14.997 2L21 8l.001 4.26A5.47 5.47 0 0 0 17.5 11l-.221.004a5.5 5.5 0 0 0-5.127 4.205l-.016.074l-.03.02A4.75 4.75 0 0 0 10.878 22H3.993a.993.993 0 0 1-.986-.876L3 21.008V2.992c0-.498.387-.927.885-.985L4.002 2zM17.5 13a3.5 3.5 0 0 1 3.5 3.5l-.002.103a2.75 2.75 0 0 1-.58 5.392L20.25 22h-5.5l-.168-.005a2.75 2.75 0 0 1-.579-5.393L14 16.5a3.5 3.5 0 0 1 3.5-3.5" /></svg>
+                                        <span
+                                            class="font-bold text-2xl">FileFrame</span>
                                     </div>
-                                    <div class="ml-3 text-sm">
-                                        <label for="remember"
-                                            class="text-gray-500 dark:text-gray-300">Term and Condition</label>
-                                    </div>
-                                </div>
+                                </a>
                             </div>
-                            <button type="submit" id="register"
-                                class="w-full text-white bg-blue-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Sign
-                                up</button>
-                            <p
-                                class="text-sm font-light text-white">
-                                Don’t have an account yet? <a href="login.html"
-                                    class="font-medium text-primary-600 hover:underline">Login</a>
+                            <form>
+                                <div class="mb-[22px]">
+                                    <input type="firstName"
+                                        placeholder="First Name" id="firstName"
+                                        class="w-full px-5 py-3 text-base transition bg-transparent border rounded-md outline-none border-stroke dark:border-dark-3 text-body-color dark:text-dark-6 placeholder:text-dark-6 focus:border-primary dark:focus:border-primary focus-visible:shadow-none" />
+                                </div>
+                                <div class="mb-[22px]">
+                                    <input type="lastName"
+                                        placeholder="Last Name" id="lastName"
+                                        class="w-full px-5 py-3 text-base transition bg-transparent border rounded-md outline-none border-stroke dark:border-dark-3 text-body-color dark:text-dark-6 placeholder:text-dark-6 focus:border-primary dark:focus:border-primary focus-visible:shadow-none" />
+                                </div>
+                                <div class="mb-[22px]">
+                                    <input type="email" placeholder="Email"
+                                        id="email"
+                                        class="w-full px-5 py-3 text-base transition bg-transparent border rounded-md outline-none border-stroke dark:border-dark-3 text-body-color dark:text-dark-6 placeholder:text-dark-6 focus:border-primary dark:focus:border-primary focus-visible:shadow-none" />
+                                </div>
+                                <div class="mb-[22px]">
+                                    <input type="password"
+                                        placeholder="Password" id="password"
+                                        class="w-full px-5 py-3 text-base transition bg-transparent border rounded-md outline-none border-stroke dark:border-dark-3 text-body-color dark:text-dark-6 placeholder:text-dark-6 focus:border-primary dark:focus:border-primary focus-visible:shadow-none" />
+                                </div>
+                                <div class="mb-9">
+                                    <input type="submit" value="Sign In"
+                                        id="register"
+                                        class="w-full px-5 py-3 text-base text-white transition duration-300 ease-in-out border rounded-md cursor-pointer border-primary bg-primary hover:bg-blue-dark" />
+                                </div>
+                            </form>
+
+                            <p class="mb-4 text-base text-body-secondary">
+                                By creating an account you are agree with our
+                                <a href="javascript:void(0)"
+                                    class="text-primary hover:underline">
+                                    Privacy
+                                </a>
+                                and
+                                <a href="javascript:void(0)"
+                                    class="text-primary hover:underline">
+                                    Policy
+                                </a>
                             </p>
-                        </form>
+
+                            <p class="text-base text-body-secondary">
+                                Already have an account?
+                                <a href="login.html"
+                                    class="text-primary hover:underline">
+                                    Sign Up
+                                </a>
+                            </p>
+
+                            <div>
+                                <span class="absolute top-1 right-1">
+                                    <svg width="40" height="40"
+                                        viewBox="0 0 40 40" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="1.39737" cy="38.6026"
+                                            r="1.39737"
+                                            transform="rotate(-90 1.39737 38.6026)"
+                                            fill="#3056D3" />
+                                        <circle cx="1.39737" cy="1.99122"
+                                            r="1.39737"
+                                            transform="rotate(-90 1.39737 1.99122)"
+                                            fill="#3056D3" />
+                                        <circle cx="13.6943" cy="38.6026"
+                                            r="1.39737"
+                                            transform="rotate(-90 13.6943 38.6026)"
+                                            fill="#3056D3" />
+                                        <circle cx="13.6943" cy="1.99122"
+                                            r="1.39737"
+                                            transform="rotate(-90 13.6943 1.99122)"
+                                            fill="#3056D3" />
+                                        <circle cx="25.9911" cy="38.6026"
+                                            r="1.39737"
+                                            transform="rotate(-90 25.9911 38.6026)"
+                                            fill="#3056D3" />
+                                        <circle cx="25.9911" cy="1.99122"
+                                            r="1.39737"
+                                            transform="rotate(-90 25.9911 1.99122)"
+                                            fill="#3056D3" />
+                                        <circle cx="38.288" cy="38.6026"
+                                            r="1.39737"
+                                            transform="rotate(-90 38.288 38.6026)"
+                                            fill="#3056D3" />
+                                        <circle cx="38.288" cy="1.99122"
+                                            r="1.39737"
+                                            transform="rotate(-90 38.288 1.99122)"
+                                            fill="#3056D3" />
+                                        <circle cx="1.39737" cy="26.3057"
+                                            r="1.39737"
+                                            transform="rotate(-90 1.39737 26.3057)"
+                                            fill="#3056D3" />
+                                        <circle cx="13.6943" cy="26.3057"
+                                            r="1.39737"
+                                            transform="rotate(-90 13.6943 26.3057)"
+                                            fill="#3056D3" />
+                                        <circle cx="25.9911" cy="26.3057"
+                                            r="1.39737"
+                                            transform="rotate(-90 25.9911 26.3057)"
+                                            fill="#3056D3" />
+                                        <circle cx="38.288" cy="26.3057"
+                                            r="1.39737"
+                                            transform="rotate(-90 38.288 26.3057)"
+                                            fill="#3056D3" />
+                                        <circle cx="1.39737" cy="14.0086"
+                                            r="1.39737"
+                                            transform="rotate(-90 1.39737 14.0086)"
+                                            fill="#3056D3" />
+                                        <circle cx="13.6943" cy="14.0086"
+                                            r="1.39737"
+                                            transform="rotate(-90 13.6943 14.0086)"
+                                            fill="#3056D3" />
+                                        <circle cx="25.9911" cy="14.0086"
+                                            r="1.39737"
+                                            transform="rotate(-90 25.9911 14.0086)"
+                                            fill="#3056D3" />
+                                        <circle cx="38.288" cy="14.0086"
+                                            r="1.39737"
+                                            transform="rotate(-90 38.288 14.0086)"
+                                            fill="#3056D3" />
+                                    </svg>
+                                </span>
+                                <span class="absolute left-1 bottom-1">
+                                    <svg width="29" height="40"
+                                        viewBox="0 0 29 40" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="2.288" cy="25.9912"
+                                            r="1.39737"
+                                            transform="rotate(-90 2.288 25.9912)"
+                                            fill="#3056D3" />
+                                        <circle cx="14.5849" cy="25.9911"
+                                            r="1.39737"
+                                            transform="rotate(-90 14.5849 25.9911)"
+                                            fill="#3056D3" />
+                                        <circle cx="26.7216" cy="25.9911"
+                                            r="1.39737"
+                                            transform="rotate(-90 26.7216 25.9911)"
+                                            fill="#3056D3" />
+                                        <circle cx="2.288" cy="13.6944"
+                                            r="1.39737"
+                                            transform="rotate(-90 2.288 13.6944)"
+                                            fill="#3056D3" />
+                                        <circle cx="14.5849" cy="13.6943"
+                                            r="1.39737"
+                                            transform="rotate(-90 14.5849 13.6943)"
+                                            fill="#3056D3" />
+                                        <circle cx="26.7216" cy="13.6943"
+                                            r="1.39737"
+                                            transform="rotate(-90 26.7216 13.6943)"
+                                            fill="#3056D3" />
+                                        <circle cx="2.288" cy="38.0087"
+                                            r="1.39737"
+                                            transform="rotate(-90 2.288 38.0087)"
+                                            fill="#3056D3" />
+                                        <circle cx="2.288" cy="1.39739"
+                                            r="1.39737"
+                                            transform="rotate(-90 2.288 1.39739)"
+                                            fill="#3056D3" />
+                                        <circle cx="14.5849" cy="38.0089"
+                                            r="1.39737"
+                                            transform="rotate(-90 14.5849 38.0089)"
+                                            fill="#3056D3" />
+                                        <circle cx="26.7216" cy="38.0089"
+                                            r="1.39737"
+                                            transform="rotate(-90 26.7216 38.0089)"
+                                            fill="#3056D3" />
+                                        <circle cx="14.5849" cy="1.39761"
+                                            r="1.39737"
+                                            transform="rotate(-90 14.5849 1.39761)"
+                                            fill="#3056D3" />
+                                        <circle cx="26.7216" cy="1.39761"
+                                            r="1.39737"
+                                            transform="rotate(-90 26.7216 1.39761)"
+                                            fill="#3056D3" />
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
+        <!-- ====== Forms Section End -->
 
+        <!-- ====== Made With Button Start -->
+        <a target="_blank" rel="nofollow noopener"
+            class="inline-flex items-center gap-[10px] py-2 px-[14px] rounded-lg bg-white dark:bg-dark-2 shadow-2 fixed bottom-8 left-4 sm:left-9 z-[999]"
+            href="https://github.com/yoni-tad/">
+            <span class="text-base font-medium text-dark-3 dark:text-dark-6">
+                Made with Yoni Tad
+            </span>
+            <span class="block w-px h-4 bg-stroke dark:bg-dark-3"></span>
+        </a>
+        <!-- ====== Made With Button End -->
+
+        <!-- ====== All Scripts -->
         <script src="./src/js/register.js"></script>
     </body>
+
 </html>

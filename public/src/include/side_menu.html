@@ -1,5 +1,6 @@
 <!-- ======================================= SIDE MENU START ======================================= -->
-<div class="sticky top-0 flex h-screen w-16 flex-col justify-between border-e bg-white">
+<div
+    class="sticky top-0 flex h-screen w-16 flex-col justify-between border-e bg-white">
     <div>
         <div
             class="inline-flex size-16 items-center justify-center">
@@ -142,9 +143,9 @@
                 Github
             </span>
         </a>
-        <form action="#">
+        <form>
             <button
-                type="submit"
+                type="button" id="logout"
                 class="group relative flex w-full justify-center rounded-lg px-2 py-1.5 text-sm text-gray-500 hover:bg-gray-50 hover:text-gray-700">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -168,3 +169,10 @@
     </div>
 </div>
 <!-- ======================================= SIDE MENU END ======================================= -->
+<script>
+    document.getElementById('logout').addEventListener('click', (e) => {
+        e.preventDefault
+        localStorage.removeItem('token')
+        window.location.href = 'index.html'
+    })
+ </script>
