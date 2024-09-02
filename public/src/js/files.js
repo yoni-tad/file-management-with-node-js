@@ -1,6 +1,24 @@
 document.addEventListener("DOMContentLoaded", async () => {
   const domain = "http://localhost:3000";
   const token = localStorage.getItem("token");
+  toastr.options = {
+    closeButton: true,
+    debug: false,
+    newestOnTop: false,
+    progressBar: true,
+    positionClass: "toast-bottom-right",
+    preventDuplicates: true,
+    onclick: null,
+    showDuration: "300",
+    hideDuration: "1000",
+    timeOut: "3000",
+    extendedTimeOut: "1000",
+    showEasing: "swing",
+    hideEasing: "linear",
+    showMethod: "fadeIn",
+    hideMethod: "fadeOut",
+  };
+
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.search);
   const pathValue = params.get("path");
@@ -64,6 +82,19 @@ document.addEventListener("DOMContentLoaded", async () => {
     } catch (e) {
       console.log(`Check User Status Error ${e}`);
       window.location.href = `login.html?error=${e}`;
+    }
+  }
+
+  // Update quota
+  function updateQuota() {
+    checkUser();
+    const quota = localStorage.getItem("quota");
+    if (quota) {
+      document.getElementById("quotaMB").textContent = `${
+        Math.round((quota / (1024 * 1024)) * 10) / 10
+      } MB`;
+      document.getElementById("totalQuota").textContent =
+        role == "user" ? `50 MB` : `150 MB`;
     }
   }
 
@@ -220,6 +251,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     new DataTable("#example");
   }
 
+  // Sanitize Folder Name
+  function sanitizeFolderName(folderName) {
+    const unwantedCharactersPattern = /[<>:"/\\|?*]+/g;
+    const sanitizedFolderName = folderName
+      .replace(unwantedCharactersPattern, "")
+      .replace(/\s+/g, "_");
+    return sanitizedFolderName;
+  }
+
   // create folder
   function create(path) {
     document.getElementById("newFolder").addEventListener("click", function () {
@@ -228,15 +268,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     document
       .getElementById("createFolder")
       .addEventListener("click", function () {
-        const folderName = document.getElementById("folderName").value;
+        const folderName = sanitizeFolderName(
+          document.getElementById("folderName").value
+        );
         if (folderName == null) return;
         createFolder(path, folderName);
         document.getElementById("folderName").value = "";
         document.getElementById("newFolderModal").style.display = "none";
       });
   }
-
-  // Create folder
   async function createFolder(path, name) {
     try {
       const email = localStorage.getItem("email");
@@ -254,9 +294,15 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       if (response.ok) {
         console.log("Folder created");
+        toastr.success(`${name} folder created`);
+        fetchFiles();
+      } else {
+        console.log(response.message);
+        return toastr.error("Try again");
       }
     } catch (e) {
       console.log(`Error: ${e}`);
+      return toastr.error("Try again");
     }
     fetchFiles(path);
   }
@@ -274,13 +320,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     const fileSize = file.size;
     const newQuota = parseInt(quota) + fileSize;
 
-    if (fileSize > 524288000) {
-      return console.log("Max upload upto 500 MB");
-    } else if (role == "user" && newQuota > 52428800) {
+    if (fileSize > 25 * (1024 * 1024)) {
+      toastr.error("Max upload upto 25 MB");
+      return console.log("Max upload upto 25 MB");
+    } else if (role == "user" && newQuota > 50 * (1024 * 1024)) {
+      toastr.error("Your quota is full use premium");
       document.getElementById("progressForm").style.display = "none";
       document.getElementById("subscribeAlert").style.display = "block";
       return console.log("Your quota is full use premium" + newQuota);
-    } else if (role == "premium" && newQuota > 157286400) {
+    } else if (role == "premium" && newQuota > 150 * (1024 * 1024)) {
+      toastr.error("Your quota is full");
       document.getElementById("progressForm").style.display = "none";
       document.getElementById("subscribeAlert").style.display = "block";
       return console.log("Your quota is full");
@@ -311,32 +360,35 @@ document.addEventListener("DOMContentLoaded", async () => {
     };
     xhr.onload = function () {
       if (xhr.status === 201) {
+        updateQuota();
         fetchFiles(path);
+        toastr.success("File successfully uploaded");
       } else {
         console.log("Error:", JSON.parse(xhr.responseText).message);
+        toastr.error("Try again");
       }
     };
     xhr.onerror = function () {
       console.error("Upload failed.");
+      toastr.error("Try again");
     };
     xhr.send(formData);
   }
 
-  
   // Delete and edit handler
   document.querySelector("#example tbody").addEventListener("click", (e) => {
     if (e.target.classList.contains("renameFolderBtn")) {
       const id = e.target.getAttribute("data-id");
       const folderName = e.target.getAttribute("data-value");
-      document.getElementById('editFolderModal').style.display = 'block'
-      document.getElementById('renameFolder').value = folderName
+      document.getElementById("editFolderModal").style.display = "block";
+      document.getElementById("renameFolder").value = folderName;
       const deleteModalBtn = document.getElementById("renameFolderSave");
       deleteModalBtn.setAttribute("data-id", id);
     } else if (e.target.classList.contains("renameFileBtn")) {
       const id = e.target.getAttribute("data-id");
       const fileName = e.target.getAttribute("data-value");
-      document.getElementById('editFileModal').style.display = 'block'
-      document.getElementById('renameFile').value = fileName
+      document.getElementById("editFileModal").style.display = "block";
+      document.getElementById("renameFile").value = fileName;
       const deleteModalBtn = document.getElementById("renameFileSave");
       deleteModalBtn.setAttribute("data-id", id);
     } else if (e.target.classList.contains("deleteFolderBtn")) {
@@ -351,29 +403,31 @@ document.addEventListener("DOMContentLoaded", async () => {
       deleteModalBtn.setAttribute("data-id", id);
     } else if (e.target.classList.contains("downloadFile")) {
       const id = e.target.getAttribute("data-id");
-      downloadFile(id)
-    } 
+      downloadFile(id);
+    }
   });
 
   //  Rename folder
-  document.getElementById("renameFolderSave").addEventListener('click', (e) => {
+  document.getElementById("renameFolderSave").addEventListener("click", (e) => {
     const id = e.target.getAttribute("data-id");
-    const rename = document.getElementById('renameFolder').value
-    if(rename == null) return
-    renameFolder(id, rename)
-  })
+    const rename = sanitizeFolderName(
+      document.getElementById("renameFolder").value
+    );
+    if (rename == null) return;
+    renameFolder(id, rename);
+  });
 
   async function renameFolder(id, name) {
     try {
       const response = await fetch(`${domain}/api/file/rename-folder`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-type': 'application/json'
+          "Content-type": "application/json",
         },
         body: JSON.stringify({
           id: id,
-          name: name
-        })
+          name: name,
+        }),
       });
 
       if (response.ok) {
@@ -382,28 +436,31 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
     } catch (e) {
       console.log(`Error: ${e}`);
+      toastr.error("Try again");
     }
   }
 
   //  Rename file
-  document.getElementById("renameFileSave").addEventListener('click', (e) => {
+  document.getElementById("renameFileSave").addEventListener("click", (e) => {
     const id = e.target.getAttribute("data-id");
-    const rename = document.getElementById('renameFile').value
-    if(rename == null) return
-    renameFile(id, rename)
-  })
+    const rename = sanitizeFolderName(
+      document.getElementById("renameFile").value
+    );
+    if (rename == null) return;
+    renameFile(id, rename);
+  });
 
   async function renameFile(id, name) {
     try {
       const response = await fetch(`${domain}/api/file/rename-file`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-type': 'application/json'
+          "Content-type": "application/json",
         },
         body: JSON.stringify({
           id: id,
-          name: name
-        })
+          name: name,
+        }),
       });
 
       if (response.ok) {
@@ -412,6 +469,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
     } catch (e) {
       console.log(`Error: ${e}`);
+      toastr.error("Try again");
     }
   }
 
@@ -431,14 +489,17 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
     } catch (e) {
       console.log(`Error: ${e}`);
+      toastr.error("Try again");
     }
   }
 
   // Delete file
-  document.getElementById("deleteFileModalBtn").addEventListener("click", (e) => {
-    const id = e.target.getAttribute("data-id");
-    deleteFile(id);
-  });
+  document
+    .getElementById("deleteFileModalBtn")
+    .addEventListener("click", (e) => {
+      const id = e.target.getAttribute("data-id");
+      deleteFile(id);
+    });
 
   async function deleteFile(id) {
     try {
@@ -450,6 +511,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
     } catch (e) {
       console.log(`Error: ${e}`);
+      toastr.error('Try again')
     }
   }
 
@@ -457,9 +519,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   async function downloadFile(id) {
     try {
       const response = await fetch(`${domain}/api/file/download-file/${id}`);
-      window.location.href = `${domain}/api/file/download-file/${id}`
+      window.location.href = `${domain}/api/file/download-file/${id}`;
     } catch (e) {
       console.log(`Error: ${e}`);
-    }    
+      toastr.error('Try again')
+    }
   }
 });
