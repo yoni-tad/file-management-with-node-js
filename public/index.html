@@ -15,6 +15,17 @@
         <link rel="stylesheet" href="assets/css/animate.css" />
         <link rel="stylesheet" href="assets/css/tailwind.css" />
 
+        <!-- Toastr CSS -->
+        <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"
+            rel="stylesheet">
+        <!-- jQuery (required by Toastr) -->
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <!-- Toastr JS -->
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
         <!-- ==== WOW JS ==== -->
         <script src="assets/js/wow.min.js"></script>
         <script>
@@ -2646,23 +2657,23 @@
                                 class="mb-8 text-2xl font-semibold text-dark dark:text-white md:text-[28px] md:leading-[1.42]">
                                 Send us a Message
                             </h3>
-                            <form>
+                            <form id="contactForm">
                                 <div class="mb-[22px]">
                                     <label
                                         for="fullName"
                                         class="mb-4 block text-sm text-body-color dark:text-dark-6">Full
                                         Name*</label>
-                                    <input
+                                    <input id="name"
                                         type="text"
                                         name="fullName"
-                                        placeholder="Adam Gelius"
+                                        placeholder="Abebe Kebede"
                                         class="w-full border-0 border-b border-[#f1f1f1] bg-transparent pb-3 text-body-color placeholder:text-body-color/60 focus:border-primary focus:outline-none dark:border-dark-3 dark:text-dark-6" />
                                 </div>
                                 <div class="mb-[22px]">
                                     <label
                                         for="email"
                                         class="mb-4 block text-sm text-body-color dark:text-dark-6">Email*</label>
-                                    <input
+                                    <input id="email"
                                         type="email"
                                         name="email"
                                         placeholder="example@yourmail.com"
@@ -2672,25 +2683,25 @@
                                     <label
                                         for="phone"
                                         class="mb-4 block text-sm text-body-color dark:text-dark-6">Phone*</label>
-                                    <input
+                                    <input id="phone"
                                         type="text"
                                         name="phone"
-                                        placeholder="+885 1254 5211 552"
+                                        placeholder="+251 964 582 841"
                                         class="w-full border-0 border-b border-[#f1f1f1] bg-transparent pb-3 text-body-color placeholder:text-body-color/60 focus:border-primary focus:outline-none dark:border-dark-3 dark:text-dark-6" />
                                 </div>
                                 <div class="mb-[30px]">
                                     <label
                                         for="message"
                                         class="mb-4 block text-sm text-body-color dark:text-dark-6">Message*</label>
-                                    <textarea
+                                    <textarea id="message"
                                         name="message"
                                         rows="1"
                                         placeholder="type your message here"
                                         class="w-full resize-none border-0 border-b border-[#f1f1f1] bg-transparent pb-3 text-body-color placeholder:text-body-color/60 focus:border-primary focus:outline-none dark:border-dark-3 dark:text-dark-6"></textarea>
                                 </div>
                                 <div class="mb-0">
-                                    <button
-                                        type="submit"
+                                    <button onclick="sendMessage()"
+                                        type="button"
                                         class="inline-flex items-center justify-center rounded-md bg-primary px-10 py-3 text-base font-medium text-white transition duration-300 ease-in-out hover:bg-blue-dark">
                                         Send
                                     </button>
@@ -2931,6 +2942,67 @@
           },
         },
       });
+
+
+    //   Contact form 
+    function isEmpty(str) {
+        return !str.trim().length;
+    }
+
+    toastr.options = {
+    closeButton: true,
+    debug: false,
+    newestOnTop: false,
+    progressBar: true,
+    positionClass: "toast-top-right",
+    preventDuplicates: false,
+    onclick: null,
+    showDuration: "300",
+    hideDuration: "1000",
+    timeOut: "3000",
+    extendedTimeOut: "1000",
+    showEasing: "swing",
+    hideEasing: "linear",
+    showMethod: "fadeIn",
+    hideMethod: "fadeOut",
+    };
+    
+    async function sendMessage() {
+        const contactForm = document.getElementById('contactForm')
+        const fullName = contactForm.querySelector('[name="fullName"]').value
+        const email = contactForm.querySelector('[name="email"]').value
+        const phone = contactForm.querySelector('[name="phone"]').value
+        const message = contactForm.querySelector('[name="message"]').value
+
+        if(isEmpty(fullName) && isEmpty(email) && isEmpty(phone) && isEmpty(message)) return;
+        
+        const response = await fetch('http://localhost:3000/api/auth/contact', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                name: fullName,
+                email: email,
+                phone, phone,
+                message: message
+            })
+        })
+
+        const data = await response.json()
+        if(response.ok) {
+            contactForm.querySelector('[name="fullName"]').value = ''
+            contactForm.querySelector('[name="email"]').value = ''
+            contactForm.querySelector('[name="phone"]').value = ''
+            contactForm.querySelector('[name="message"]').value = ''
+
+            console.log(data.message)
+            toastr.success(data.message)
+        } else {
+            console.log(data.message)
+            toastr.error('Try again!')
+        }
+    }
     </script>
     </body>
 </html>
