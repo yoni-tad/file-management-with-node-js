@@ -16,6 +16,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       const data = await response.json();
       if (response.ok) {
+        globalThis.email = data.email;
+        localStorage.setItem("email", data.email);
         globalThis.role = data.role;
         if(role == 'premium') {
           document.getElementById('paymentInit').textContent = 'Thanks for use premium'
@@ -33,7 +35,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   async function payment() {
-    console.log('Payment init')
+    const email = localStorage.getItem("email");
     const response = await fetch(`${domain}/api/auth/initialize-payment`, {
       method: "POST",
       headers: {
@@ -41,7 +43,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       },
       body: JSON.stringify({
         amount: "1",
-        email: "yoni@gmail.com"
+        email: email
       }),
     });
 
