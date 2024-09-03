@@ -155,6 +155,9 @@ exports.paymentCallback = async (req, res) => {
       { new: true }
     );
 
+    const email = payment.email
+    const updateUser = await UserSchema.findOneAndUpdate({email: email}, {role: 'premium'})
+
     if (!payment) {
       return res.status(404).json({ error: 'Payment not found' });
     }
