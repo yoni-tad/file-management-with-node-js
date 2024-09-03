@@ -104,3 +104,7 @@ exports.Contact = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
+exports.Payment = async (req, res) => {
+  
+}
