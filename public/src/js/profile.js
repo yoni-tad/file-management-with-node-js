@@ -41,6 +41,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("firstName").value = firstName;
         document.getElementById("lastName").value = lastName;
         document.getElementById("email").value = email;
+        if(role == 'premium') {
+          document.getElementById('pricing').style.display = 'none'
+        }
       } else {
         console.log("Failed to fetch data");
         window.location.href = "login.html?status=error&message=Try again";

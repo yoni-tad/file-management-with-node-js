@@ -1,13 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>File Management</title>
+        <script src="https://cdn.tailwindcss.com"></script>
 
-    <script src="./src/js/payment.js"></script>
-</body>
+        <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+        <script
+            src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+        <link rel="stylesheet"
+            href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css">
+
+        <!-- Toastr CSS -->
+        <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"
+            rel="stylesheet">
+        <!-- jQuery (required by Toastr) -->
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <!-- Toastr JS -->
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    </head>
+    <body>
+        <div class="flex h-screen">
+            <header></header>
+            <div>
+
+            </div>
+            <div class="flex-1 p-8">
+                <section class="py-10 sm:py-16 lg:py-24">
+                    <div class="max-w-5xl px-4 mx-auto sm:px-6 lg:px-8">
+                        <div class="max-w-2xl mx-auto text-center">
+                            <h2 class="text-3xl font-bold leading-tight text-black sm:text-4xl lg:text-5xl text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-600 to-blue-600">Thank You for Your Payment!</h2>
+                            <p class="mt-3 text-xl leading-relaxed text-gray-600 md:mt-8">Your transaction has been completed successfully. We appreciate your trust and support. If you have any questions or need further assistance, please don't hesitate to contact our customer service team. <br>Have a great day!</p>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </div>
+
+        <script src="./src/js/payment.js"></script>
+        <script>
+            $(document).ready(function(){
+                $('header').load("./src/include/side_menu.html");
+                // $('footer').load("./src/include/footer.html");
+            });
+        </script>
+    </body>
 </html>

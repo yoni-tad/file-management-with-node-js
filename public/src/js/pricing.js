@@ -16,6 +16,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       const data = await response.json();
       if (response.ok) {
+        globalThis.role = data.role;
+        if(role == 'premium') {
+          document.getElementById('paymentInit').textContent = 'Thanks for use premium'
+          document.getElementById('paymentInit').disabled = true
+        }
+        
       } else {
         console.log("Failed to fetch data");
         window.location.href = "login.html?status=error&message=Try again";
