@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>File Management</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+
+        <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+        <script
+            src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+        <link rel="stylesheet"
+            href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css">
+
+        <!-- Toastr CSS -->
+        <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"
+            rel="stylesheet">
+        <!-- jQuery (required by Toastr) -->
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <!-- Toastr JS -->
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    </head>
+    <body>
+        <div class="flex h-screen">
+            <header></header>
+            <div class="flex-1 p-8">
+                <div class="flex flex-row">
+                    <main class="w-full min-h-screen py-1 md:w-2/3 lg:w-2/3">
+                        <div
+                            class="w-full px-6 sm:max-w-xl sm:rounded-lg">
+                            <h2 class="text-2xl font-bold sm:text-xl">Update
+                                profile</h2>
+                            <div class="grid max-w-2xl mx-auto mt-4">
+                                <div
+                                    class="items-center text-[#202142]">
+                                    <div
+                                        class="flex flex-col items-center w-full mb-2 space-x-0 space-y-2 sm:flex-row sm:space-x-4 sm:space-y-0 sm:mb-6">
+                                        <div class="w-full">
+                                            <label for="firstName"
+                                                class="block mb-2 text-sm font-medium text-indigo-900">First
+                                                Name</label>
+                                            <input type="text"
+                                                id="firstName"
+                                                class="bg-indigo-50 border border-indigo-300 text-indigo-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5 "
+                                                placeholder="Your first name"
+                                                value="Jane" required>
+                                        </div>
+
+                                        <div class="w-full">
+                                            <label for="lastName"
+                                                class="block mb-2 text-sm font-medium text-indigo-900">Last
+                                                Name</label>
+                                            <input type="text"
+                                                id="lastName"
+                                                class="bg-indigo-50 border border-indigo-300 text-indigo-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5 "
+                                                placeholder="Your last name"
+                                                value="Ferguson" required>
+                                        </div>
+                                    </div>
+                                    <div class="mb-2 sm:mb-6">
+                                        <label for="email"
+                                            class="block mb-2 text-sm font-medium text-indigo-900">Email</label>
+                                        <input type="email" id="email"
+                                            class="bg-indigo-50 border border-indigo-300 text-indigo-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5 "
+                                            value="youremail@mail.com"
+                                            disabled>
+                                    </div>
+
+                                    <div class="mb-2 sm:mb-6">
+                                        <label for="password"
+                                            class="block mb-2 text-sm font-medium text-indigo-900">Password</label>
+                                        <input type="text" id="password"
+                                            class="bg-indigo-50 border border-indigo-300 text-indigo-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5 "
+                                            placeholder="********"
+                                            required>
+                                    </div>
+
+                                    <div class="flex justify-end">
+                                        <button type="button" id="updateProfile"
+                                            class="text-white bg-indigo-700  hover:bg-indigo-800 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-800">Update</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </main>
+                    <section>
+                        <div class="mx-auto  max-w-7xl">
+                            <div class="text-center">
+                                <h2
+                                    class="font-manrope text-5xl text-center font-bold text-gray-900 mb-4">
+                                    Our pricing plan
+                                </h2>
+                                <p
+                                    class="text-gray-500 text-xl text-center leading-6 mb-6">
+                                    Lifetime membership.
+                                </p>
+                                <div class="mb-2 flex justify-center">
+                                    <span class="flex items-center">
+                                        <svg
+                                            class="w-16 h-11"
+                                            viewBox="0 0 65 43"
+                                            fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M42.0964 4.02732C39.5251 4.74637 37.1135 5.87152 34.9795 7.36979C34.0529 8.02188 33.2561 8.68389 32.5982 9.38799C32.5386 9.38153 32.482 9.38579 32.4118 9.38233C30.1332 9.37225 27.711 10.2114 25.0194 11.9465C20.4292 14.906 16.7212 19.2023 14.2904 24.3897C12.0636 29.1502 11.0911 34.265 11.4596 39.2591L7.6368 36.04L6.83225 37.0047L12.587 41.8449L16.9956 35.7576L15.9819 35.024L13.1146 38.9812C12.4253 28.9566 17.4523 18.8014 25.9225 13.3583C27.861 12.1112 29.6087 11.3798 31.2299 11.146C30.6487 12.083 30.2872 13.0624 30.1426 14.0738C29.9087 15.7573 30.5083 17.6123 31.7101 18.8943C32.6977 19.9474 33.9541 20.4744 35.2551 20.3764C36.5669 20.2755 37.7738 19.5103 38.5629 18.2841C39.4661 16.8873 39.6838 15.1043 39.1492 13.6472C38.4686 11.7917 36.7603 10.3508 34.6701 9.73325C35.0524 9.40674 35.4806 9.07896 35.9331 8.75591C42.0235 4.51004 50.3771 3.60724 57.2293 6.46459L57.8719 4.92101C54.237 3.40628 50.175 2.84314 46.1137 3.2738C44.7513 3.40049 43.4035 3.6618 42.0964 4.02732ZM37.5828 14.2008C37.9503 15.1845 37.7787 16.3883 37.1605 17.3586C36.9123 17.7517 36.3954 18.3817 35.5811 18.6094C35.4419 18.6483 35.2889 18.6795 35.1406 18.6863C34.3594 18.743 33.5726 18.4082 32.933 17.7318C32.0791 16.8263 31.6418 15.4691 31.8087 14.2898C31.9645 13.1944 32.4639 12.1301 33.2993 11.1106C35.286 11.3987 36.9819 12.5889 37.5828 14.2008Z"
+                                                fill="#9CA3AF" />
+                                        </svg>
+
+                                        <span
+                                            class="inline-block whitespace-nowrap text-xs leading-4 font-semibold tracking-wide bg-indigo-50 text-indigo-600 rounded-full py-2 px-4">Save
+                                            500%</span>
+                                    </span>
+                                </div>
+                                <!--Switch-->
+                                <div class="tabs">
+                                    <div
+                                        id="tabs-with-background-1"
+                                        role="tabpanel"
+                                        aria-labelledby="tabs-with-background-item-1"
+                                        class="tabcontent mt-6"
+                                        style>
+                                        <div>
+                                            <div
+                                                class="group relative flex flex-col mx-auto w-full max-w-sm text-gray-900 rounded-2xl border border-solid border-gray-300 text-center transition-all duration-500 p-6 xl:p-12 bg-gradient-to-r from-indigo-600 to-violet-600 hover:before:opacity-100 before:contents[' '] before:absolute before:bg-indigo-800 before:w-full before:h-full before:top-0 before:left-0 before:rounded-2xl before:opacity-0 before:transition-all before:duration-500 before:z-0">
+                                                <h3
+                                                    class="relative flex items-center justify-center font-manrope text-2xl font-bold mb-6 text-white">
+                                                    Premium
+                                                    <span
+                                                        class="h-6 px-3 relative rounded-full border border-solid border-gray-100 text-sm ml-4">Popular</span>
+                                                </h3>
+                                                <div
+                                                    class="mb-20 flex flex-col relative">
+                                                    <span
+                                                        class="font-manrope text-6xl font-semibold mb-2 text-white">1
+                                                        ETB</span>
+                                                    <span
+                                                        class="text-xl text-gray-300">Pay
+                                                        once, own it
+                                                        forever</span>
+                                                </div>
+                                                <a
+                                                    href="pricing.html"
+                                                    class="relative py-2.5 px-5 bg-white shadow-sm rounded-full transition-all duration-500 text-base text-indigo-600 font-semibold text-center w-fit mx-auto">Purchase
+                                                    Plan</a>
+                                                <!--List End-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div
+                                        id="tabs-with-background-2"
+                                        class="tabcontent mt-12"
+                                        role="tabpanel"
+                                        aria-labelledby="tabs-with-background-item-2"
+                                        style="display: none">
+                                        <div
+                                            class="space-y-8 lg:grid lg:grid-cols-3 sm:gap-6 xl:gap-8 lg:space-y-0">
+                                            <!--Pricing Card-->
+                                            <div
+                                                class="group relative flex flex-col mx-auto w-full max-w-sm text-gray-900 rounded-2xl border border-solid border-gray-300 text-center transition-all duration-300 p-6 xl:p-12 hover:border-indigo-600">
+                                                <h3
+                                                    class="font-manrope text-2xl font-bold mb-6">Free</h3>
+                                                <div
+                                                    class="mb-20 flex flex-col">
+                                                    <span
+                                                        class="font-manrope text-6xl font-semibold mb-2">$0</span>
+                                                    <span
+                                                        class="text-xl text-gray-400">Lifetime</span>
+                                                </div>
+                                                <a
+                                                    href="javascript:;"
+                                                    class="py-2.5 px-5 bg-indigo-50 shadow-sm rounded-full transition-all duration-500 text-base text-indigo-600 font-semibold text-center w-fit mx-auto group-hover:bg-indigo-600 group-hover:text-white">Purchase
+                                                    Plan</a>
+                                                <!--List End-->
+                                            </div>
+                                            <!--Pricing Card-->
+                                            <div
+                                                class="group relative flex flex-col mx-auto w-full max-w-sm text-gray-900 rounded-2xl border border-solid border-gray-300 text-center transition-all duration-500 p-6 xl:p-12 bg-gradient-to-r from-indigo-600 to-violet-600 hover:before:opacity-100 before:contents[' '] before:absolute before:bg-indigo-800 before:w-full before:h-full before:top-0 before:left-0 before:rounded-2xl before:opacity-0 before:transition-all before:duration-500 before:z-0">
+                                                <h3
+                                                    class="relative flex items-center justify-center font-manrope text-2xl font-bold mb-6 text-white">
+                                                    Advanced
+                                                    <span
+                                                        class="h-6 px-3 relative rounded-full border border-solid border-gray-100 text-sm ml-4">Popular</span>
+                                                </h3>
+                                                <div
+                                                    class="mb-20 flex flex-col relative">
+                                                    <span
+                                                        class="font-manrope text-6xl font-semibold mb-2 text-white">$39</span>
+                                                    <span
+                                                        class="text-xl text-gray-300">Per
+                                                        Month</span>
+                                                </div>
+                                                <a
+                                                    href="javascript:;"
+                                                    class="relative py-2.5 px-5 bg-white shadow-sm rounded-full transition-all duration-500 text-base text-indigo-600 font-semibold text-center w-fit mx-auto">Purchase
+                                                    Plan</a>
+                                                <!--List End-->
+                                            </div>
+                                            <!--Pricing Card-->
+                                            <div
+                                                class="group relative flex flex-col mx-auto w-full max-w-sm text-gray-900 rounded-2xl border border-solid border-gray-300 text-center transition-all duration-300 p-8 xl:p-12 hover:border-indigo-600">
+                                                <h3
+                                                    class="font-manrope text-2xl font-bold mb-6">Team</h3>
+                                                <div
+                                                    class="mb-20 flex flex-col">
+                                                    <span
+                                                        class="font-manrope text-6xl font-semibold mb-2">$49</span>
+                                                    <span
+                                                        class="text-xl text-gray-400">Per
+                                                        Month</span>
+                                                </div>
+                                                <a
+                                                    href="javascript:;"
+                                                    class="py-2.5 px-5 bg-indigo-50 shadow-sm rounded-full transition-all duration-500 text-base text-indigo-600 font-semibold text-center w-fit mx-auto group-hover:bg-indigo-600 group-hover:text-white">Purchase
+                                                    Plan</a>
+                                                <!--List End-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--Switch End-->
+                            </div>
+                        </div>
+                    </section>
+
+                </div>
+            </div>
+        </div>
+
+        <script src="./src/js/profile.js"></script>
+        <script>
+            $(document).ready(function(){
+                $('header').load("./src/include/side_menu.html");
+                // $('footer').load("./src/include/footer.html");
+            });
+        </script>
+    </body>
+</html>
