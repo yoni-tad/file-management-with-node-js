@@ -2,6 +2,7 @@ const fs = require("fs");
 const UserSchema = require("../models/user_model");
 const FolderSchema = require("../models/folder_model");
 const jwt = require("jsonwebtoken");
+const bcrypt = require('bcrypt')
 const ContactSchema = require("../models/contact_model");
 
 exports.Register = async (req, res) => {
@@ -66,6 +67,25 @@ exports.Profile = async (req, res) => {
     role: req.user.role,
   });
 };
+
+exports.UpdateProfile = async (req, res) => {
+  const {firstName, lastName, password} = req.body
+  const email = req.user.email
+
+  const checkUser = await UserSchema.findOne({email: email})
+  if(!checkUser) return res.status(404).json({message: 'User not found!'})
+
+  const salt = await bcrypt.genSalt(10)
+  const hashedPassword = await bcrypt.hash(password, salt)
+
+  const response = await UserSchema.findOneAndUpdate({email, email}, {
+    firstName: firstName,
+    lastName: lastName,
+    password: hashedPassword
+  })
+
+  res.json({message: 'Profile update successfully'})
+}
 
 exports.Contact = async (req, res) => {
   const { name, email, phone, message } = req.body;

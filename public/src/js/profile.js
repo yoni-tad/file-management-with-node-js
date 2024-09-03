@@ -38,11 +38,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         globalThis.email = data.email;
         globalThis.quota = data.quota;
         globalThis.role = data.role;
-        localStorage.setItem("firstName", data.firstName);
-        localStorage.setItem("lastName", data.lastName);
-        localStorage.setItem("email", data.email);
-        localStorage.setItem("quota", data.quota);
-        localStorage.setItem("role", data.role);
+        document.getElementById("firstName").value = firstName;
+        document.getElementById("lastName").value = lastName;
+        document.getElementById("email").value = email;
       } else {
         console.log("Failed to fetch data");
         window.location.href = "login.html?status=error&message=Try again";
@@ -52,4 +50,36 @@ document.addEventListener("DOMContentLoaded", async () => {
       window.location.href = "login.html?status=error&message=Try again";
     }
   }
+
+  async function updateProfile() {
+    const firstName = document.getElementById("firstName").value;
+    const lastName = document.getElementById("lastName").value;
+    const password = document.getElementById("password").value;
+
+    const response = await fetch(`${domain}/api/auth/update-profile`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        firstName: firstName,
+        lastName: lastName,
+        password: password,
+      }),
+    });
+
+    if (response.ok) {
+      document.getElementById("firstName").value = firstName
+      document.getElementById("lastName").value = lastName
+      document.getElementById("password").value = ''
+      toastr.success("Profile update successfully");
+    } else {
+      toastr.error("Try again");
+    }
+  }
+
+  document
+    .getElementById("updateProfile")
+    .addEventListener("click", updateProfile);
 });
