@@ -1,5 +1,5 @@
 const express = require('express')
-const { Register, Login, Profile, Contact, UpdateProfile, Payment } = require('../controller/auth_controller')
+const { Register, Login, Profile, Contact, UpdateProfile, Payment, InitPayment, paymentCallback } = require('../controller/auth_controller')
 const { Authenticate } = require('../middlewares/auth_middleware')
 const authRoute = express.Router()
 
@@ -13,7 +13,9 @@ authRoute.post('/update-profile', Authenticate, UpdateProfile)
 
 authRoute.post('/contact', Contact)
 
-authRoute.post('/payment', Payment)
+authRoute.post('/initialize-payment', InitPayment)
+
+authRoute.post('/payment-callback', paymentCallback)
 
 
 

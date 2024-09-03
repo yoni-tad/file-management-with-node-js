@@ -3,7 +3,10 @@ const UserSchema = require("../models/user_model");
 const FolderSchema = require("../models/folder_model");
 const jwt = require("jsonwebtoken");
 const bcrypt = require('bcrypt')
+const axios = require('axios')
+const mongoose = require('mongoose')
 const ContactSchema = require("../models/contact_model");
+const PaymentSchema = require("../models/payment_model");
 
 exports.Register = async (req, res) => {
   const { firstName, lastName, email, password } = req.body;
@@ -105,6 +108,60 @@ exports.Contact = async (req, res) => {
   }
 };
 
-exports.Payment = async (req, res) => {
-  
+exports.InitPayment = async (req, res) => {
+  const {email, amount} = req.body
+  const transactionId = new mongoose.Types.ObjectId().toString();
+
+  try {
+    const response = await axios.post(
+      'https://api.chapa.co/v1/transaction/initialize',
+      {
+        amount: amount,
+        currency: 'ETB',
+        email: email,
+        tx_ref: transactionId,
+        callback_url: `http://localhost:3000/payment.html?tx_ref=${transactionId}`,
+        return_url: `http://localhost:3000/payment.html?tx_ref=${transactionId}`
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.CHAPA_KEY}`,
+        },
+      }
+    );
+
+    const newPayment = PaymentSchema.create({
+      transactionId,
+      amount,
+      email,
+      status: 'pending',
+    })
+
+    res.json({ paymentUrl: response.data.data.checkout_url })
+  } catch (e) {
+    console.log(e.message);
+    res.status(500).json({ message: "Server error" });
+  }
+
+}
+
+exports.paymentCallback = async (req, res) => {
+  const { tx_ref, status } = req.body;
+
+  try {
+    const payment = await PaymentSchema.findOneAndUpdate(
+      { transactionId: tx_ref },
+      { status: status },
+      { new: true }
+    );
+
+    if (!payment) {
+      return res.status(404).json({ error: 'Payment not found' });
+    }
+
+    res.json({ message: 'Payment updated successfully', payment });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to update payment status' });
+  }
 }
