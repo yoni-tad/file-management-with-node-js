@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", async () => {
-  const domain = "http://localhost:3000";
+  const domain = "https://file-management-with-node-js.onrender.com";
   const token = localStorage.getItem("token");
   checkUser();
   toastr.options = {

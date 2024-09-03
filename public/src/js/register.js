@@ -1,4 +1,4 @@
-const domain = "http://localhost:3000";
+const domain = "https://file-management-with-node-js.onrender.com";
 toastr.options = {
   closeButton: true,
   debug: false,

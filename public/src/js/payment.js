@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", async () => {
-  const domain = "http://localhost:3000";
+  const domain = "https://file-management-with-node-js.onrender.com";
   const currentUrl = new URL(window.location.href);
   const urlRef = currentUrl.searchParams.get("tx_ref");
 
