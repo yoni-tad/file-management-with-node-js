@@ -1,4 +1,4 @@
-const domain = "https://file-management-with-node-js.onrender.com";
+const domain = "https://fileframe.ynitsolution.com";
 toastr.options = {
   closeButton: true,
   debug: false,

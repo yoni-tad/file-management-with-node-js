@@ -120,8 +120,8 @@ exports.InitPayment = async (req, res) => {
         currency: 'ETB',
         email: email,
         tx_ref: transactionId,
-        callback_url: `https://file-management-with-node-js.onrender.com/payment.html?tx_ref=${transactionId}`,
-        return_url: `https://file-management-with-node-js.onrender.com/payment.html?tx_ref=${transactionId}`
+        callback_url: `https://fileframe.ynitsolution.com/payment.html?tx_ref=${transactionId}`,
+        return_url: `https://fileframe.ynitsolution.com/payment.html?tx_ref=${transactionId}`
       },
       {
         headers: {

@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", async () => {
-  const domain = "https://file-management-with-node-js.onrender.com";
+  const domain = "https://fileframe.ynitsolution.com";
   const token = localStorage.getItem("token");
   checkUser();
   toastr.options = {
