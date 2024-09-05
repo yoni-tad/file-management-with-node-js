@@ -60,7 +60,7 @@ This project was developed as a part of my learning journey with Node.js. I woul
 
 ## Contributing
 
-# Contributions are welcome! Feel free to open an issue or submit a pull request.
+### Contributions are welcome! Feel free to open an issue or submit a pull request.
 
 ## License
 
